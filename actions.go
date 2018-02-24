@@ -4,16 +4,15 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
 
 	"github.com/DHowett/go-plist"
 	"github.com/urfave/cli"
 )
 
-type Application struct {
+type application struct {
 	Name    string
 	Version string
-	OS      string
+	Path    string
 }
 
 type iOSBundlerHeader struct {
@@ -22,27 +21,31 @@ type iOSBundlerHeader struct {
 }
 
 func current(c *cli.Context) error {
-	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	dir, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	allFiles := findiOSFile(dir)
 	for _, file := range allFiles {
-		application := getCurrentVersion(file)
-		fmt.Printf("%v [iOS] - %v", application.Name, application.Version)
+		info := getCurrentVersion(file)
+		fmt.Println(fmt.Sprintf("%v - [iOS] - %v (%v)", info.Version, info.Name, info.Path))
 	}
 	return nil
 }
 
-func getCurrentVersion(filePath string) Application {
+func getCurrentVersion(filePath string) application {
 	decoder := plist.NewDecoder(openFile(filePath))
 	var data iOSBundlerHeader
 	err := decoder.Decode(&data)
 	if err != nil {
 		fmt.Println(err)
 	}
-	return Application{Name: data.BundleName, Version: data.BundleVersion}
+	return application{
+		Name:    data.BundleName,
+		Version: data.BundleVersion,
+		Path:    filePath,
+	}
 }
 
 func openFile(filePath string) *os.File {
