@@ -1,7 +1,5 @@
 version: "{build}"
 
-os: Windows Server 2016
-
 image: Visual Studio 2017
 
 clone_folder: c:\gopath\src\github.com\gabrielrobert\xavtool
@@ -11,7 +9,10 @@ environment:
   GOVERSION: 1.10.x
 
 install:
-- set PATH=%GOPATH%\bin;C:\go\bin;%PATH%
-- go version
-- go env
-- go get github.com/gabrielrobert/xavtool
+  - set PATH=%GOPATH%\bin;C:\go\bin;%PATH%
+  - go version
+  - go env
+  - go get github.com/gabrielrobert/xavtool
+
+test_script:
+  - go test -v
