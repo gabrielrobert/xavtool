@@ -14,5 +14,8 @@ install:
   - go env
   - go get github.com/gabrielrobert/xavtool
 
+build_script:
+  - go build
+
 test_script:
   - go test -v
