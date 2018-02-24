@@ -5,6 +5,8 @@ import (
 )
 
 func TestCurrent(t *testing.T) {
-	current(nil)
-	t.Errorf("credentials file mismatch")
+	currentVersion := getCurrentVersion()
+	if currentVersion != "1.0.1" {
+		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.1")
+	}
 }

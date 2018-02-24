@@ -7,6 +7,10 @@ import (
 )
 
 func current(c *cli.Context) error {
-	fmt.Printf("current version is 0.0.0")
+	fmt.Printf("current version is %v", getCurrentVersion())
 	return nil
+}
+
+func getCurrentVersion() string {
+	return "1.0.1"
 }
