@@ -1,6 +1,7 @@
 package main
 
 import (
+	"reflect"
 	"strings"
 )
 
@@ -19,5 +20,24 @@ func stringContainsInSlice(a string, list []string) bool {
 			return true
 		}
 	}
+	return false
+}
+
+func containsStructFieldValue(slice interface{}, fieldName string, fieldValueToCheck interface{}) bool {
+
+	rangeOnMe := reflect.ValueOf(slice)
+
+	for i := 0; i < rangeOnMe.Len(); i++ {
+		s := rangeOnMe.Index(i)
+		f := s.FieldByName(fieldName)
+		if f.IsValid() {
+			fieldAsString := f.Interface().(string)
+			fieldValueAsString := fieldValueToCheck.(string)
+			if strings.Contains(fieldAsString, fieldValueAsString) {
+				return true
+			}
+		}
+	}
+
 	return false
 }

@@ -16,8 +16,8 @@ type packageInfo struct {
 var files = []string{"info.plist", "androidmanifest.xml"}
 var ignoreFolders = []string{"bin", "obj", ".git"}
 
-func findManifests(root string) []string {
-	fileList := []string{}
+func findManifests(root string) []packageInfo {
+	fileList := []packageInfo{}
 
 	err := filepath.Walk(root, func(path string, f os.FileInfo, err error) error {
 
@@ -26,7 +26,11 @@ func findManifests(root string) []string {
 		}
 
 		if isManifestFile(f) {
-			fileList = append(fileList, path)
+			if isiOsPackage(f.Name()) {
+				fileList = append(fileList, getiOSPackageInfo(path))
+			} else if isAndroidPackage(f.Name()) {
+				fileList = append(fileList, getAndroidPackageInfo(path))
+			}
 		}
 		return nil
 	})
