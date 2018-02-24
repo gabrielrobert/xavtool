@@ -15,9 +15,14 @@ func current(c *cli.Context) error {
 	}
 
 	allFiles := findManifests(dir)
-	for _, file := range allFiles {
-		fmt.Println(fmt.Sprintf("%v - %v (%v)", file.Version, file.Name, file.Path))
+	if len(allFiles) == 0 {
+		fmt.Println("No application has been found")
+	} else {
+		for _, file := range allFiles {
+			fmt.Println(fmt.Sprintf("%v - %v (%v)", file.Version, file.Name, file.Path))
+		}
 	}
+
 	return nil
 }
 
