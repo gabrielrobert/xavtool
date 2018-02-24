@@ -5,12 +5,11 @@ Command-line utility to automatically increase iOS / Android / UWP applications 
 ## Usage
 
 ```bash
-# Increments
+# Sementic versioning
 xavtool increment major
 xavtool increment minor
 xavtool increment path
 
-# Downgrades
 xavtool downgrade major
 xavtool downgrade minor
 xavtool downgrade path
