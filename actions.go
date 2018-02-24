@@ -26,6 +26,11 @@ func current(c *cli.Context) error {
 	return nil
 }
 
+func increment(c *cli.Context) error {
+	fmt.Println("Incrementing")
+	return nil
+}
+
 func openFile(filePath string) *os.File {
 	file, err := os.Open(filePath)
 	if err != nil {

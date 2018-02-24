@@ -35,6 +35,7 @@ AUTHOR:
 
 COMMANDS:
      current, c  List current versions
+     increment, i  Increment to next minor version
      help, h     Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
