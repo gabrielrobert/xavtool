@@ -2,17 +2,27 @@
 
 Command-line utility to automatically increase iOS / Android / UWP applications version written in [Go](https://golang.org/).
 
+## Installation
+
+From source:
+
+```bash
+$ go install
+$ xavtool 
+xavtool version *.*.*
+```
+
 ## Usage
 
 ```bash
 # Sementic versioning
-xavtool increment major
-xavtool increment minor
-xavtool increment path
+$ xavtool increment major
+$ xavtool increment minor
+$ xavtool increment path
 
-xavtool downgrade major
-xavtool downgrade minor
-xavtool downgrade path
+$ xavtool downgrade major
+$ xavtool downgrade minor
+$ xavtool downgrade path
 
 # Infos
 xavtool current
