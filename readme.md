@@ -8,7 +8,7 @@ From source:
 
 ```bash
 $ go install
-$ xavtool 
+$ xavtool --version
 xavtool version *.*.*
 ```
 
