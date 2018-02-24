@@ -9,11 +9,7 @@ import (
 )
 
 func current(c *cli.Context) error {
-	dir, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	dir := getWorkingDir()
 	allFiles := findManifests(dir)
 	if len(allFiles) == 0 {
 		fmt.Println("No application has been found")
@@ -29,6 +25,14 @@ func current(c *cli.Context) error {
 func increment(c *cli.Context) error {
 	fmt.Println("Incrementing")
 	return nil
+}
+
+func getWorkingDir() string {
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return dir
 }
 
 func openFile(filePath string) *os.File {
