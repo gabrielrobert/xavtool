@@ -14,7 +14,6 @@ func findiOSFile(root string) []string {
 
 	err := filepath.Walk(root, func(path string, f os.FileInfo, err error) error {
 
-		// ignore specific folders
 		if toBeIgnored(f) {
 			return filepath.SkipDir
 		}
@@ -22,7 +21,6 @@ func findiOSFile(root string) []string {
 		if isiOSFile(f) {
 			fileList = append(fileList, path)
 		}
-
 		return nil
 	})
 
