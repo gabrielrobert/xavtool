@@ -7,9 +7,16 @@ import (
 	"strings"
 )
 
+type packageInfo struct {
+	Name    string
+	Version string
+	Path    string
+}
+
+var files = []string{"info.plist", "androidmanifest.xml"}
 var ignoreFolders = []string{"bin", "obj", ".git"}
 
-func findiOSFile(root string) []string {
+func findManifests(root string) []string {
 	fileList := []string{}
 
 	err := filepath.Walk(root, func(path string, f os.FileInfo, err error) error {
@@ -18,7 +25,7 @@ func findiOSFile(root string) []string {
 			return filepath.SkipDir
 		}
 
-		if isiOSFile(f) {
+		if isManifestFile(f) {
 			fileList = append(fileList, path)
 		}
 		return nil
@@ -38,8 +45,9 @@ func toBeIgnored(f os.FileInfo) bool {
 	return false
 }
 
-func isiOSFile(f os.FileInfo) bool {
-	if !f.IsDir() && strings.ToLower(f.Name()) == "info.plist" {
+func isManifestFile(f os.FileInfo) bool {
+	loweredFileName := strings.ToLower(f.Name())
+	if !f.IsDir() && stringInSlice(loweredFileName, files) {
 		return true
 	}
 	return false

@@ -9,12 +9,6 @@ import (
 	"github.com/urfave/cli"
 )
 
-type application struct {
-	Name    string
-	Version string
-	Path    string
-}
-
 type iOSBundlerHeader struct {
 	BundleName    string `plist:"CFBundleDisplayName"`
 	BundleVersion string `plist:"CFBundleVersion"`
@@ -26,22 +20,22 @@ func current(c *cli.Context) error {
 		log.Fatal(err)
 	}
 
-	allFiles := findiOSFile(dir)
+	allFiles := findManifests(dir)
 	for _, file := range allFiles {
 		info := getCurrentVersion(file)
-		fmt.Println(fmt.Sprintf("%v - [iOS] - %v (%v)", info.Version, info.Name, info.Path))
+		fmt.Println(fmt.Sprintf("%v - %v (%v)", info.Version, info.Name, info.Path))
 	}
 	return nil
 }
 
-func getCurrentVersion(filePath string) application {
+func getCurrentVersion(filePath string) packageInfo {
 	decoder := plist.NewDecoder(openFile(filePath))
 	var data iOSBundlerHeader
 	err := decoder.Decode(&data)
 	if err != nil {
 		fmt.Println(err)
 	}
-	return application{
+	return packageInfo{
 		Name:    data.BundleName,
 		Version: data.BundleVersion,
 		Path:    filePath,
