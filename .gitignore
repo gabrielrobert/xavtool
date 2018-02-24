@@ -1,6 +1,3 @@
-
-# Created by https://www.gitignore.io/api/go
-
 ### Go ###
 # Binaries for programs and plugins
 *.exe
@@ -17,5 +14,5 @@
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
 
-
-# End of https://www.gitignore.io/api/go
+# Editors
+.vscode/*
