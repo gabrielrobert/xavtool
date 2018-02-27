@@ -21,4 +21,8 @@ func TestFindManifests(t *testing.T) {
 	if !containsStructFieldValue(foundFiles, "Path", "Info.plist") {
 		t.Errorf("test file info.plist has not been found, expected %v", "test/Info.plist")
 	}
+
+	if !containsStructFieldValue(foundFiles, "Path", "AndroidManifest.xml") {
+		t.Errorf("test file androidmanifest.xml has not been found, expected %v", "test/AndroidManifest.xml")
+	}
 }
