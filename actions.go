@@ -23,7 +23,12 @@ func current(c *cli.Context) error {
 }
 
 func increment(c *cli.Context) error {
-	fmt.Println("Incrementing")
+	dir := getWorkingDir()
+	allFiles := findManifests(dir)
+	for _, file := range allFiles {
+		newVersion := incrementPatch(file.Version)
+		fmt.Println(fmt.Sprintf("%v: New version: %v (%v)", file.Version, newVersion, file.Path))
+	}
 	return nil
 }
 
