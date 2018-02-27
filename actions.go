@@ -73,9 +73,3 @@ func saveFile(filePath string, data []byte) {
 	err := ioutil.WriteFile(filePath, data, 0666)
 	check(err)
 }
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}

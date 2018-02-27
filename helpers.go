@@ -14,15 +14,6 @@ func stringInSlice(a string, list []string) bool {
 	return false
 }
 
-func stringContainsInSlice(a string, list []string) bool {
-	for _, b := range list {
-		if strings.Contains(b, a) {
-			return true
-		}
-	}
-	return false
-}
-
 func containsStructFieldValue(slice interface{}, fieldName string, fieldValueToCheck interface{}) bool {
 
 	rangeOnMe := reflect.ValueOf(slice)
@@ -40,4 +31,10 @@ func containsStructFieldValue(slice interface{}, fieldName string, fieldValueToC
 	}
 
 	return false
+}
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
 }
