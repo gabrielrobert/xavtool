@@ -30,6 +30,7 @@ func changeiOSPackageVersion(file packageInfo, newVersion string) error {
 	var data = map[string]interface{}{}
 	err := decoder.Decode(&data)
 	data["CFBundleVersion"] = newVersion
+	data["CFBundleShortVersionString"] = newVersion
 
 	// write data inside buffer
 	var bufferedData bytes.Buffer
