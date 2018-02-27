@@ -18,7 +18,6 @@ xavtool version *.*.*
 ## Usage
 
 ```bash
-# Sementic versioning
 $ xavtool
 
 NAME:
@@ -41,6 +40,20 @@ COMMANDS:
 GLOBAL OPTIONS:
    --help, -h     show help
    --version, -v  print the version
+```
+
+### increment
+```bash
+$ xavtool increment --help
+
+NAME:
+   xavtool increment - Increment to next version
+
+USAGE:
+   xavtool increment [command options] [arguments...]
+
+OPTIONS:
+   --type value, -t value  major, minor, path (default: "minor")
 ```
 
 ## Support
