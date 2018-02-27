@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 	"testing"
 )
@@ -9,9 +8,7 @@ import (
 func TestFindManifests(t *testing.T) {
 	// scan current folder
 	dir, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
+	check(err)
 
 	foundFiles := findManifests(dir)
 	if foundFiles == nil || len(foundFiles) == 0 {

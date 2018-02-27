@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 )
 
@@ -15,9 +13,7 @@ func saveFile(filePath string, data []byte) {
 
 func openFile(filePath string) *os.File {
 	file, err := os.Open(filePath)
-	if err != nil {
-		fmt.Println(err)
-	}
+	check(err)
 	return file
 }
 
@@ -29,8 +25,6 @@ func readFile(filePath string) []byte {
 
 func getWorkingDir() string {
 	dir, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
+	check(err)
 	return dir
 }

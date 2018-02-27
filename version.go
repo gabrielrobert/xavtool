@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/Masterminds/semver"
 )
 
@@ -26,8 +24,6 @@ func incrementPatch(version string) string {
 
 func parse(version string) *semver.Version {
 	parsedVersion, err := semver.NewVersion(version)
-	if err != nil {
-		log.Fatal(err)
-	}
+	check(err)
 	return parsedVersion
 }

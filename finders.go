@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -35,10 +34,7 @@ func findManifests(root string) []packageInfo {
 		return nil
 	})
 
-	if err != nil {
-		fmt.Println(err)
-	}
-
+	check(err)
 	return fileList
 }
 
