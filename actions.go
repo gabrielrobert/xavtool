@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 
@@ -46,4 +47,22 @@ func openFile(filePath string) *os.File {
 		fmt.Println(err)
 	}
 	return file
+}
+
+func readFile(filePath string) []byte {
+	dat, err := ioutil.ReadFile(filePath)
+	check(err)
+	return dat
+}
+
+func saveFile(filePath string, data []byte) {
+	os.RemoveAll(filePath)
+	err := ioutil.WriteFile(filePath, data, 0666)
+	check(err)
+}
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
 }
