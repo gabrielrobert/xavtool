@@ -10,6 +10,8 @@ Command-line utility to automatically increase iOS / Android / UWP applications 
 From source:
 
 ```bash
+$ go build
+$ go test -v
 $ go install
 $ xavtool --version
 xavtool version *.*.*

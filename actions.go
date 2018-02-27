@@ -6,6 +6,7 @@ import (
 	"github.com/urfave/cli"
 )
 
+// called by executing `xavtool current`
 func current(c *cli.Context) error {
 	dir := getWorkingDir()
 	allFiles := findManifests(dir)
@@ -20,6 +21,7 @@ func current(c *cli.Context) error {
 	return nil
 }
 
+// called by executing `xavtool increment`
 func increment(c *cli.Context) error {
 	dir := getWorkingDir()
 	allFiles := findManifests(dir)
