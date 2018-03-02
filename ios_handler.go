@@ -29,6 +29,7 @@ func changeiOSPackageVersion(file packageInfo, newVersion string) error {
 	decoder := plist.NewDecoder(openFile(file.Path))
 	var data = map[string]interface{}{}
 	err := decoder.Decode(&data)
+	check(err)
 
 	// increment version
 	data["CFBundleVersion"] = newVersion
@@ -42,8 +43,8 @@ func changeiOSPackageVersion(file packageInfo, newVersion string) error {
 	encoder := plist.NewEncoder(&bufferedData)
 	encoder.Indent("\t")
 	err = encoder.Encode(data)
-
 	check(err)
+
 	saveFile(file.Path, bufferedData.Bytes())
 	return nil
 }
