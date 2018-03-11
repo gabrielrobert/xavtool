@@ -28,7 +28,7 @@ func isAndroidPackage(filename string) bool {
 
 func getAndroidPackageInfo(filePath string) packageInfo {
 	byteValue, _ := ioutil.ReadAll(openFile(filePath))
-	data := readData(byteValue)
+	data := readAndroidData(byteValue)
 	return packageInfo{
 		Name:    data.Name,
 		Version: data.VersionName,
@@ -36,40 +36,20 @@ func getAndroidPackageInfo(filePath string) packageInfo {
 	}
 }
 
-func readData(data []byte) *androidBundlerHeader {
+func readAndroidData(data []byte) *androidBundlerHeader {
 	var header androidBundlerHeader
 	xml.Unmarshal(data, &header)
 	return &header
 }
 
 func changeAndroidPackageVersion(file packageInfo, newVersion string) error {
-	fileReader := bytes.NewReader(readFile(file.Path))
-	for m, err := mxj.NewMapXmlSeqReader(fileReader); m != nil || err != io.EOF; m, err = mxj.NewMapXmlSeqReader(fileReader) {
-		if err != nil {
-			if err == mxj.NO_ROOT {
-				continue
-			} else {
-				check(err)
-			}
-		}
-		vmap := m["manifest"].(map[string]interface{})
-		acmt, err := mxj.Map(vmap).ValueForPath("#attr.android:versionName.#text")
-		acmt = newVersion
-		mxj.Map(vmap).SetValueForPath(acmt, "#attr.android:versionName.#text")
-		err = m.SetValueForPath(vmap, "manifest")
-		if err != nil {
-			fmt.Println("SetValueForPath err:", err)
-			break
-		}
-		b, err := m.XmlSeqIndent("", "  ")
-		check(err)
-		saveFile(file.Path, b)
-	}
-
+	fileBytes := readFile(file.Path)
+	processedBytes := applyVersionToAndroidXML(fileBytes, newVersion)
+	saveFile(file.Path, processedBytes)
 	return nil
 }
 
-func applyVersionToMap(data []byte, newVersion string) []byte {
+func applyVersionToAndroidXML(data []byte, newVersion string) []byte {
 	fileReader := bytes.NewReader(data)
 	for m, err := mxj.NewMapXmlSeqReader(fileReader); m != nil || err != io.EOF; m, err = mxj.NewMapXmlSeqReader(fileReader) {
 		if err != nil {
