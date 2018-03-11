@@ -28,7 +28,7 @@ func Test_changeAndroidPackageVersion(t *testing.T) {
 }
 
 func Test_applyVersionToAndroidXML(t *testing.T) {
-	processedBytes := applyVersionToAndroidXML(data, "1.0.2")
+	processedBytes := applyVersionToAndroidXML(androidSeed, "1.0.2")
 	xml := readAndroidData(processedBytes)
 	if xml.VersionName != "1.0.2" {
 		t.Errorf("VersionName mismatch; expected %v", "1.0.2")
@@ -40,7 +40,7 @@ func Test_applyVersionToAndroidXML(t *testing.T) {
 
 var filePath = "test/AndroidManifest.xml"
 
-var data = []byte(`
+var androidSeed = []byte(`
 	<?xml version="1.0" encoding="utf-8"?>
 	<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.xavtool"
