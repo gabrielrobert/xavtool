@@ -5,20 +5,20 @@ import (
 )
 
 func Test_getAndroidPackageInfo(t *testing.T) {
-	currentVersion := getAndroidPackageInfo("test/AndroidManifest.xml")
+	currentVersion := getAndroidPackageInfo(filePath)
 	if currentVersion.Version != "1.0.1" {
 		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.1")
 	}
 }
 
 func Test_changeAndroidPackageVersion(t *testing.T) {
-	currentVersion := getAndroidPackageInfo("test/AndroidManifest.xml")
+	currentVersion := getAndroidPackageInfo(filePath)
 	if currentVersion.Version != "1.0.1" {
 		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.1")
 	}
 
 	changeAndroidPackageVersion(currentVersion, "1.0.2")
-	currentVersion = getAndroidPackageInfo("test/AndroidManifest.xml")
+	currentVersion = getAndroidPackageInfo(filePath)
 	if currentVersion.Version != "1.0.2" {
 		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.2")
 	}
@@ -34,6 +34,8 @@ func Test_applyVersionToAndroidXML(t *testing.T) {
 		t.Errorf("version mismatch; expected %v", "1.0.2")
 	}
 }
+
+var filePath = "test/AndroidManifest.xml"
 
 var data = []byte(`
 	<?xml version="1.0" encoding="utf-8"?>
