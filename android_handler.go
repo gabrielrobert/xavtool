@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/xml"
 	"io"
-	"io/ioutil"
 	"strings"
 
 	"github.com/clbanning/mxj"
@@ -26,7 +25,7 @@ func isAndroidPackage(filename string) bool {
 }
 
 func getAndroidPackageInfo(filePath string) packageInfo {
-	byteValue, _ := ioutil.ReadAll(openFile(filePath))
+	byteValue := readFile(filePath)
 	data := readAndroidData(byteValue)
 	return packageInfo{
 		Name:    data.Name,
