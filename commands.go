@@ -10,5 +10,18 @@ func commands() []cli.Command {
 			Usage:   "List current versions",
 			Action:  current,
 		},
+		{
+			Name:    "increment",
+			Aliases: []string{"i"},
+			Usage:   "Increment to next version",
+			Action:  increment,
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "type, t",
+					Usage: "Increment type (major, minor, patch)",
+					Value: "minor",
+				},
+			},
+		},
 	}
 }

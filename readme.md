@@ -10,6 +10,8 @@ Command-line utility to automatically increase iOS / Android / UWP applications 
 From source:
 
 ```bash
+$ go build
+$ go test -v
 $ go install
 $ xavtool --version
 xavtool version *.*.*
@@ -18,14 +20,13 @@ xavtool version *.*.*
 ## Usage
 
 ```bash
-# Sementic versioning
 $ xavtool
 
 NAME:
    xavtool - Command-line utility to automatically increase applications version
 
 USAGE:
-   xavtool.exe [global options] command [command options] [arguments...]
+   xavtool [global options] command [command options] [arguments...]
 
 VERSION:
    0.1.0
@@ -34,12 +35,27 @@ AUTHOR:
    Gabriel Robert <g.robert092@gmail.com>
 
 COMMANDS:
-     current, c  List current versions
-     help, h     Shows a list of commands or help for one command
+     current, c    List current versions
+     increment, i  Increment to next version
+     help, h       Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
    --help, -h     show help
    --version, -v  print the version
+```
+
+### increment
+```bash
+$ xavtool increment --help
+
+NAME:
+   xavtool increment - Increment to next version
+
+USAGE:
+   xavtool increment [command options] [arguments...]
+
+OPTIONS:
+   --type value, -t value  major, minor, path (default: "minor")
 ```
 
 ## Support

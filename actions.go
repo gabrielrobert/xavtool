@@ -2,36 +2,45 @@ package main
 
 import (
 	"fmt"
-	"os"
 
-	"github.com/DHowett/go-plist"
 	"github.com/urfave/cli"
 )
 
-type iOSBundlerHeader struct {
-	BundleVersion string `plist:"CFBundleVersion"`
-}
-
+// called by executing `xavtool current`
 func current(c *cli.Context) error {
-	fmt.Printf("iOS version - %v", getCurrentVersion("test/Info.plist"))
+	dir := getWorkingDir()
+	allFiles := findManifests(dir)
+	if len(allFiles) == 0 {
+		fmt.Println("No application has been found")
+	} else {
+		for _, file := range allFiles {
+			fmt.Println(fmt.Sprintf("%v - %v (%v)", file.Version, file.Name, file.Path))
+		}
+	}
+
 	return nil
 }
 
-func getCurrentVersion(filePath string) string {
-	file := openFile(filePath)
-	decoder := plist.NewDecoder(file)
-	var data iOSBundlerHeader
-	err := decoder.Decode(&data)
-	if err != nil {
-		fmt.Println(err)
-	}
-	return data.BundleVersion
-}
+// called by executing `xavtool increment`
+func increment(c *cli.Context) error {
+	dir := getWorkingDir()
+	allFiles := findManifests(dir)
+	for _, file := range allFiles {
 
-func openFile(filePath string) *os.File {
-	file, err := os.Open(filePath)
-	if err != nil {
-		fmt.Println(err)
+		newVersion := file.Version
+		switch incrementType := c.String("type"); incrementType {
+		case "major":
+			newVersion = incrementMajor(file.Version)
+		case "minor":
+			newVersion = incrementMinor(file.Version)
+		case "patch":
+			newVersion = incrementPatch(file.Version)
+		default:
+			fmt.Println(fmt.Sprintf("Invalid type %v", incrementType))
+		}
+
+		changeiOSPackageVersion(file, newVersion)
+		fmt.Println(fmt.Sprintf("%v: New version: %v (%v)", file.Version, newVersion, file.Path))
 	}
-	return file
+	return nil
 }
