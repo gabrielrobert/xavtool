@@ -33,7 +33,15 @@ func readiOSData(data []byte) map[string]interface{} {
 
 func changeiOSPackageVersion(file packageInfo, newVersion string) error {
 	// open file with all data
-	decoder := plist.NewDecoder(openFile(file.Path))
+	byteValue := readFile(file.Path)
+	processedBytes := applyVersionToiOSPlist(byteValue, newVersion)
+	saveFile(file.Path, processedBytes)
+	return nil
+}
+
+func applyVersionToiOSPlist(byteValue []byte, newVersion string) []byte {
+	buffer := bytes.NewReader(byteValue)
+	decoder := plist.NewDecoder(buffer)
 	var data = map[string]interface{}{}
 	err := decoder.Decode(&data)
 	check(err)
@@ -52,6 +60,5 @@ func changeiOSPackageVersion(file packageInfo, newVersion string) error {
 	err = encoder.Encode(data)
 	check(err)
 
-	saveFile(file.Path, bufferedData.Bytes())
-	return nil
+	return bufferedData.Bytes()
 }
