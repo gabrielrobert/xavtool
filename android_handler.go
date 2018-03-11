@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"encoding/xml"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"strings"
@@ -60,14 +59,20 @@ func applyVersionToAndroidXML(data []byte, newVersion string) []byte {
 			}
 		}
 		vmap := m["manifest"].(map[string]interface{})
+
+		// edit versionName attr
 		acmt, err := mxj.Map(vmap).ValueForPath("#attr.android:versionName.#text")
 		acmt = newVersion
 		mxj.Map(vmap).SetValueForPath(acmt, "#attr.android:versionName.#text")
 		err = m.SetValueForPath(vmap, "manifest")
-		if err != nil {
-			fmt.Println("SetValueForPath err:", err)
-			break
-		}
+
+		// edit versionCode attr
+		acmt, err = mxj.Map(vmap).ValueForPath("#attr.android:versionCode.#text")
+		acmt = strings.Replace(newVersion, ".", "", -1)
+		mxj.Map(vmap).SetValueForPath(acmt, "#attr.android:versionCode.#text")
+		err = m.SetValueForPath(vmap, "manifest")
+
+		check(err)
 		b, err := m.XmlSeqIndent("", "  ")
 		check(err)
 		return b
