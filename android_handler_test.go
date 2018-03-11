@@ -30,9 +30,6 @@ func Test_changeAndroidPackageVersion(t *testing.T) {
 func Test_applyVersionToAndroidXML(t *testing.T) {
 	processedBytes := applyVersionToAndroidXML(data, "1.0.2")
 	xml := readAndroidData(processedBytes)
-
-	println(xml.Code)
-	println(xml.VersionName)
 	if xml.VersionName != "1.0.2" {
 		t.Errorf("VersionName mismatch; expected %v", "1.0.2")
 	}
