@@ -9,8 +9,8 @@ go:
 script:
   - go test -v
 
-after_success:
-  - test -n "$TRAVIS_TAG" && curl -sL https://git.io/goreleaser | bash
+# after_success:
+#   - test -n "$TRAVIS_TAG" && curl -sL https://git.io/goreleaser | bash
 
 deploy:
 - provider: script
