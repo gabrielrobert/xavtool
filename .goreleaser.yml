@@ -22,3 +22,8 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+brew:
+  github:
+    owner: gabrielrobert
+    name: homebrew-tap
+  folder: Formula
