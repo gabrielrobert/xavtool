@@ -1,0 +1,10 @@
+build:
+  main: ./main.go
+  goarch:
+    - amd64
+    
+# brew:
+#   github:
+#     owner: gabrielrobert
+#     name: homebrew-tap
+#   folder: Formula
