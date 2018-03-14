@@ -12,7 +12,7 @@ func main() {
 	app.Usage = "Command-line utility to automatically increase applications version"
 	app.Author = "Gabriel Robert"
 	app.Email = "g.robert092@gmail.com"
-	app.Version = "0.1.0"
+	app.Version = "0.9.4"
 	app.Commands = commands()
 	app.Run(os.Args)
 }
