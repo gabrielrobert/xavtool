@@ -27,3 +27,5 @@ brew:
     owner: gabrielrobert
     name: homebrew-tap
   folder: Formula
+  install: |
+    bin.install "xavtool"
