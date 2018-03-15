@@ -7,14 +7,13 @@ Command-line utility to automatically increase iOS / Android / UWP applications 
 
 ## Installation
 
-### From source:
+### Windows:
+
+Using chocolatey:
 
 ```bash
-$ go build
-$ go test -v
-$ go install
+$ choco install xavtool
 $ xavtool --version
-xavtool version *.*.*
 ```
 
 ### macOS:
@@ -23,6 +22,15 @@ Using brew:
 
 ```bash
 $ brew install gabrielrobert/tap/xavtool
+$ xavtool --version
+```
+
+### From source:
+
+```bash
+$ go build
+$ go test -v
+$ go install
 $ xavtool --version
 ```
 
