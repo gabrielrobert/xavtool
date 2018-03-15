@@ -13,6 +13,7 @@ install:
   - go version
   - go env
   - go get github.com/gabrielrobert/xavtool
+  - go get github.com/goreleaser/goreleaser
 
 build_script:
   - go build
@@ -21,4 +22,15 @@ test_script:
   - go test -v
 
 after_build:
+  - goreleaser --rm-dist --snapshot
   - choco pack
+
+artifacts:
+  - path: '**\*.nupkg'
+
+deploy:
+  provider: Environment
+  name: Chocolatey
+  artifact: /.*\.nupkg/
+  on:
+    branch: master
