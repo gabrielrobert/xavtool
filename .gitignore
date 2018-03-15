@@ -20,4 +20,6 @@ dist/
 # Editors
 .vscode/*
 
+*.nupkg
+
 debug

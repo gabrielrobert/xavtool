@@ -19,3 +19,6 @@ build_script:
 
 test_script:
   - go test -v
+
+after_build:
+  - choco pack
