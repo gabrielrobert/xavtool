@@ -13,17 +13,15 @@ install:
   - go version
   - go env
   - go get github.com/gabrielrobert/xavtool
+  - go get github.com/goreleaser/goreleaser
 
 build_script:
   - go build
+  - goreleaser --rm-dist --snapshot
+  - choco pack
 
 test_script:
   - go test -v
-
-before_deploy:
-  - go get github.com/goreleaser/goreleaser
-  - goreleaser --rm-dist --snapshot
-  - choco pack
 
 artifacts:
   - path: '**\*.nupkg'
