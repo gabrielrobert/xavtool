@@ -13,7 +13,6 @@ install:
   - go version
   - go env
   - go get github.com/gabrielrobert/xavtool
-  - go get github.com/goreleaser/goreleaser
 
 build_script:
   - go build
@@ -21,7 +20,8 @@ build_script:
 test_script:
   - go test -v
 
-after_build:
+before_deploy:
+  - go get github.com/goreleaser/goreleaser
   - goreleaser --rm-dist --snapshot
   - choco pack
 
