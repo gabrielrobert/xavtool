@@ -1,3 +1,5 @@
+![Header](_assets/xavtool_header.png "Header")
+
 # Xamarin Automating Version Tool
 
 [![Build status](https://ci.appveyor.com/api/projects/status/6lfimg1j4pw9f807?svg=true)](https://ci.appveyor.com/project/grobert092/xavtool)
@@ -7,14 +9,13 @@ Command-line utility to automatically increase iOS / Android / UWP applications 
 
 ## Installation
 
-### From source:
+### Windows:
+
+Using chocolatey:
 
 ```bash
-$ go build
-$ go test -v
-$ go install
+$ choco install xavtool
 $ xavtool --version
-xavtool version *.*.*
 ```
 
 ### macOS:
@@ -23,6 +24,15 @@ Using brew:
 
 ```bash
 $ brew install gabrielrobert/tap/xavtool
+$ xavtool --version
+```
+
+### From source:
+
+```bash
+$ go build
+$ go test -v
+$ go install
 $ xavtool --version
 ```
 
