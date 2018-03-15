@@ -7,11 +7,14 @@
     <authors>gabrielrobert</authors>
     <projectUrl>https://github.com/gabrielrobert/xavtool</projectUrl>
     <projectSourceUrl>https://github.com/gabrielrobert/xavtool</projectSourceUrl>
+    <packageSourceUrl>https://github.com/gabrielrobert/xavtool</packageSourceUrl>
     <docsUrl>https://github.com/gabrielrobert/xavtool</docsUrl>
+    <licenseUrl>https://github.com/gabrielrobert/xavtool/blob/master/LICENSE</licenseUrl>
     <bugTrackerUrl>https://github.com/gabrielrobert/xavtool/issues</bugTrackerUrl>
     <tags>xavtool xamarin ios android uwp semver versioning</tags>
     <summary>Xamarin Automating Version Tool</summary>
     <description>Command-line utility to automatically increase iOS / Android / UWP applications version written in Go.</description>
+    <releaseNotes>Visit https://github.com/gabrielrobert/xavtool/releases/latest</releaseNotes>
   </metadata>
   <files>
     <file src="dist\windows_**" target="dist" />
