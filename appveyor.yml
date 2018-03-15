@@ -31,4 +31,4 @@ deploy:
   name: Chocolatey
   artifact: /.*\.nupkg/
   on:
-    branch: develop
+    branch: master
