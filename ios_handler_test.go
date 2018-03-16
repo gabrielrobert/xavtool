@@ -4,6 +4,29 @@ import (
 	"testing"
 )
 
+func Test_isiOsPackage(t *testing.T) {
+	type args struct {
+		filename string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{"filename", args{"Info.plisT"}, true},
+		{"filename with path and \\", args{"c:/dev/info.plist"}, true},
+		{"filename with path and /", args{"c:\\dev\\info.plist"}, true},
+		{"filename with path", args{"c:\\dev/info.plist"}, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := isiOsPackage(tt.args.filename); got != tt.want {
+				t.Errorf("isiOsPackage() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func Test_getiOSPackageInfo(t *testing.T) {
 	currentVersion := getiOSPackageInfo("test/Info.plist")
 	if currentVersion.Version != "1.0.1" {
