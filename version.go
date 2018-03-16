@@ -27,3 +27,11 @@ func parse(version string) *semver.Version {
 	check(err)
 	return parsedVersion
 }
+
+func isVersion(version string) bool {
+	_, err := semver.NewVersion(version)
+	if err != nil {
+		return false
+	}
+	return true
+}

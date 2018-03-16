@@ -1,6 +1,8 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 func Test_incrementMajor(t *testing.T) {
 	type args struct {
@@ -63,6 +65,29 @@ func Test_incrementPatch(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := incrementPatch(tt.args.version); got != tt.want {
 				t.Errorf("incrementPatch() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_isVersion(t *testing.T) {
+	type args struct {
+		version string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{"minimal version", args{"0.0.0"}, true},
+		{"alpha value", args{"bleh"}, false},
+		{"version with tag", args{"1.0.0-alpha"}, true},
+		{"weird version", args{"1.aplpha"}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := isVersion(tt.args.version); got != tt.want {
+				t.Errorf("isVersion() = %v, want %v", got, tt.want)
 			}
 		})
 	}

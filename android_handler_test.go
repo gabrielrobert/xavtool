@@ -4,6 +4,29 @@ import (
 	"testing"
 )
 
+func Test_isAndroidPackage(t *testing.T) {
+	type args struct {
+		filename string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{"filename", args{"AndroidmanifesT.xmL"}, true},
+		{"filename with path and \\", args{"c:/dev/androidmanifest.xml"}, true},
+		{"filename with path and /", args{"c:\\dev\\androidmanifest.xml"}, true},
+		{"filename with path", args{"c:\\dev/androidmanifest.xml"}, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := isAndroidPackage(tt.args.filename); got != tt.want {
+				t.Errorf("isAndroidPackage() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func Test_getAndroidPackageInfo(t *testing.T) {
 	currentVersion := getAndroidPackageInfo(filePath)
 	if currentVersion.Version != "1.0.1" {

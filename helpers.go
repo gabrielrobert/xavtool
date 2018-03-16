@@ -33,6 +33,15 @@ func containsStructFieldValue(slice interface{}, fieldName string, fieldValueToC
 	return false
 }
 
+func getFilename(filepath string) string {
+	separators := []string{"//", "\\\\", "/", "\\"}
+	for _, separator := range separators {
+		pathSegments := strings.Split(filepath, separator)
+		filepath = pathSegments[len(pathSegments)-1]
+	}
+	return filepath
+}
+
 func check(e error) {
 	if e != nil {
 		panic(e)

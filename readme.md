@@ -11,12 +11,23 @@ Command-line utility to automatically increase iOS / Android / UWP applications 
 
 ### Windows:
 
-Using chocolatey:
+Using [Chocolatey](https://chocolatey.org/):
 
 ```bash
 $ choco install xavtool
 $ xavtool --version
 ```
+
+Using [scoop](http://scoop.sh/):
+
+```bash
+$ scoop bucket add gabrielrobert-bucket https://github.com/gabrielrobert/scoop-bucket
+$ scoop install xavtool
+```
+
+Using binaries:
+
+> Download executables on the [release page](https://github.com/gabrielrobert/xavtool/releases/latest).
 
 ### macOS:
 
@@ -48,7 +59,7 @@ USAGE:
    xavtool [global options] command [command options] [arguments...]
 
 VERSION:
-   0.1.0
+   0.10.0
 
 AUTHOR:
    Gabriel Robert <g.robert092@gmail.com>
@@ -56,6 +67,7 @@ AUTHOR:
 COMMANDS:
      current, c    List current versions
      increment, i  Increment to next version
+     set, s        Set the current project version
      help, h       Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
@@ -75,6 +87,17 @@ USAGE:
 
 OPTIONS:
    --type value, -t value  major, minor, path (default: "minor")
+```
+
+### set
+```bash
+$ xavtool set --help
+
+NAME:
+   xavtool set - Set the current project version
+
+USAGE:
+   xavtool set [arguments...]
 ```
 
 ## Support
