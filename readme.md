@@ -11,12 +11,23 @@ Command-line utility to automatically increase iOS / Android / UWP applications 
 
 ### Windows:
 
-Using chocolatey:
+Using [Chocolatey](https://chocolatey.org/):
 
 ```bash
 $ choco install xavtool
 $ xavtool --version
 ```
+
+Using [scoop](http://scoop.sh/):
+
+```bash
+$ scoop bucket add gabrielrobert-bucket https://github.com/gabrielrobert/scoop-bucket
+$ scoop install xavtool
+```
+
+Using binaries:
+
+> Download executables on the [release page](https://github.com/gabrielrobert/xavtool/releases/latest).
 
 ### macOS:
 
