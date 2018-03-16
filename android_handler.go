@@ -21,7 +21,7 @@ type androidBundlerHeader struct {
 }
 
 func isAndroidPackage(filename string) bool {
-	return strings.ToLower(filename) == "androidmanifest.xml"
+	return strings.ToLower(getFilename(filename)) == "androidmanifest.xml"
 }
 
 func getAndroidPackageInfo(filePath string) packageInfo {
