@@ -9,7 +9,7 @@ import (
 )
 
 func isiOsPackage(filename string) bool {
-	return strings.ToLower(filename) == "info.plist"
+	return strings.ToLower(getFilename(filename)) == "info.plist"
 }
 
 func getiOSPackageInfo(filePath string) packageInfo {
