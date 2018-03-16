@@ -59,7 +59,7 @@ USAGE:
    xavtool [global options] command [command options] [arguments...]
 
 VERSION:
-   0.1.0
+   0.9.4
 
 AUTHOR:
    Gabriel Robert <g.robert092@gmail.com>
@@ -67,6 +67,7 @@ AUTHOR:
 COMMANDS:
      current, c    List current versions
      increment, i  Increment to next version
+     set, s        Set the current project version
      help, h       Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
@@ -86,6 +87,17 @@ USAGE:
 
 OPTIONS:
    --type value, -t value  major, minor, path (default: "minor")
+```
+
+### set
+```bash
+$ xavtool set --help
+
+NAME:
+   xavtool set - Set the current project version
+
+USAGE:
+   xavtool set [arguments...]
 ```
 
 ## Support

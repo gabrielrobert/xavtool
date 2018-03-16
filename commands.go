@@ -26,7 +26,7 @@ func commands() []cli.Command {
 		{
 			Name:    "set",
 			Aliases: []string{"s"},
-			Usage:   "Set the current project's version",
+			Usage:   "Set the current project version",
 			Action:  set,
 		},
 	}
