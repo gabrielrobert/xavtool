@@ -29,3 +29,11 @@ brew:
   folder: Formula
   install: |
     bin.install "xavtool"
+
+scoop:
+  bucket:
+    owner: gabrielrobert
+    name: scoop-bucket
+  homepage:  https://github.com/gabrielrobert/xavtool
+  description: Xamarin Automating Version Tool
+  license: MIT
