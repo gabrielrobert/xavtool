@@ -14,6 +14,7 @@ install:
   - go env
   - go get github.com/gabrielrobert/xavtool
   - go get github.com/goreleaser/goreleaser
+  - go get -t -v ./...
 
 build_script:
   - go build

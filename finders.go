@@ -6,9 +6,10 @@ import (
 )
 
 type packageInfo struct {
-	Name    string
-	Version string
-	Path    string
+	Name     string
+	Version  string
+	Path     string
+	HasError bool
 }
 
 func findManifests(root string) []packageInfo {
