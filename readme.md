@@ -27,7 +27,7 @@ $ scoop install xavtool
 
 ### macOS:
 
-Using brew:
+Using [brew](https://brew.sh/):
 
 ```bash
 $ brew install gabrielrobert/tap/xavtool
