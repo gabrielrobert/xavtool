@@ -5,7 +5,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/6lfimg1j4pw9f807?svg=true)](https://ci.appveyor.com/project/grobert092/xavtool)
 [![Build Status](https://travis-ci.org/gabrielrobert/xavtool.svg?branch=master)](https://travis-ci.org/gabrielrobert/xavtool)
 
-Command-line utility to automatically increase iOS / Android / UWP applications version written in [Go](https://golang.org/).
+Command-line utility to automatically increase iOS / Android / UWP applications version written in [Go](https://golang.org/). It follows [Semantic Versioning](https://semver.org/).
 
 ## Installation
 
