@@ -75,7 +75,7 @@ GLOBAL OPTIONS:
    --version, -v  print the version
 ```
 
-## Typical flow
+### Typical flow
 
 ```bash
 $ git flow release start '1.16.0'
