@@ -2,6 +2,9 @@ package main
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_isAndroidPackage(t *testing.T) {
@@ -52,12 +55,39 @@ func Test_changeAndroidPackageVersion(t *testing.T) {
 
 func Test_applyVersionToAndroidXML(t *testing.T) {
 	processedBytes := applyVersionToAndroidXML(androidSeed, "1.0.2")
-	xml := readAndroidData(processedBytes)
+	xml, _ := readAndroidData(processedBytes)
 	if xml.VersionName != "1.0.2" {
 		t.Errorf("VersionName mismatch; expected %v", "1.0.2")
 	}
 	if xml.Code != "102" {
 		t.Errorf("code mismatch; expected %v", "102")
+	}
+}
+
+func Test_readAndroidData(t *testing.T) {
+	type args struct {
+		data []byte
+	}
+	tests := []struct {
+		name        string
+		args        args
+		want        string
+		shouldError bool
+	}{
+		{"invalid bytes", args{invalidAndroidSeed}, "", true},
+		{"valid file", args{readFile("test/AndroidManifest.xml")}, "1.0.1", false},
+		{"valid bytes", args{androidSeed}, "1.0.1", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := readAndroidData(tt.args.data)
+			if tt.shouldError {
+				require.Error(t, err)
+				return
+			}
+			require.NoError(t, err)
+			assert.Equal(t, tt.want, got.VersionName)
+		})
 	}
 }
 
@@ -93,4 +123,9 @@ var androidSeed = []byte(`
 			</activity>
 		</application>
 	</manifest>
+`)
+
+var invalidAndroidSeed = []byte(`
+	<?xml version="1.0" encoding="utf-8"?>
+	<man
 `)

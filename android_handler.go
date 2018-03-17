@@ -26,7 +26,12 @@ func isAndroidPackage(filename string) bool {
 
 func getAndroidPackageInfo(filePath string) packageInfo {
 	byteValue := readFile(filePath)
-	data := readAndroidData(byteValue)
+	data, err := readAndroidData(byteValue)
+
+	if err != nil {
+		return packageInfo{Path: filePath, HasError: true}
+	}
+
 	return packageInfo{
 		Name:    data.Name,
 		Version: data.VersionName,
@@ -34,10 +39,10 @@ func getAndroidPackageInfo(filePath string) packageInfo {
 	}
 }
 
-func readAndroidData(data []byte) *androidBundlerHeader {
+func readAndroidData(data []byte) (*androidBundlerHeader, error) {
 	var header androidBundlerHeader
-	xml.Unmarshal(data, &header)
-	return &header
+	err := xml.Unmarshal(data, &header)
+	return &header, err
 }
 
 func changeAndroidPackageVersion(file packageInfo, newVersion string) error {
