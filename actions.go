@@ -8,14 +8,13 @@ import (
 
 // called by executing `xavtool current`
 func current(c *cli.Context) error {
-	dir := getWorkingDir()
-	allFiles := findManifests(dir)
+	allFiles := findManifests(getWorkingDir())
 	if len(allFiles) == 0 {
-		fmt.Println("No application has been found")
-	} else {
-		for _, file := range allFiles {
-			fmt.Println(fmt.Sprintf("%v - %v (%v)", file.Version, file.Name, file.Path))
-		}
+		return cli.NewExitError("No application has been found", 1)
+	}
+
+	for _, file := range allFiles {
+		fmt.Println(fmt.Sprintf("%v - %v (%v)", file.Version, file.Name, file.Path))
 	}
 
 	return nil
