@@ -2,6 +2,9 @@ package main
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_isiOsPackage(t *testing.T) {
@@ -28,9 +31,22 @@ func Test_isiOsPackage(t *testing.T) {
 }
 
 func Test_getiOSPackageInfo(t *testing.T) {
-	currentVersion := getiOSPackageInfo("test/Info.plist")
-	if currentVersion.Version != "1.0.1" {
-		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.1")
+	type args struct {
+		filename string
+	}
+	tests := []struct {
+		name string
+		args args
+		want packageInfo
+	}{
+		{"normal file", args{"test/Info.plist"}, packageInfo{Version: "1.0.1"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := getiOSPackageInfo(tt.args.filename); got.Version != tt.want.Version {
+				t.Errorf("getiOSPackageInfo.Version() = %v, want %v", got.Version, tt.want.Version)
+			}
+		})
 	}
 }
 
@@ -47,10 +63,31 @@ func Test_changeiOSPackageVersion(t *testing.T) {
 }
 
 func Test_applyVersionToiOSPlist(t *testing.T) {
-	processedBytes := applyVersionToiOSPlist(iOSSeed, "1.0.2")
-	iOSDetails := readiOSData(processedBytes)
-	if iOSDetails["CFBundleVersion"] != "1.0.2" {
-		t.Errorf("VersionName mismatch; expected %v", "1.0.2")
+	type args struct {
+		data    []byte
+		version string
+	}
+	tests := []struct {
+		name        string
+		args        args
+		want        string
+		shouldError bool
+	}{
+		{"invalid bytes", args{invalidPlist, "1.0.2"}, "", true},
+		{"valid file", args{readFile("test/Info.plist"), "1.0.2"}, "1.0.2", false},
+		{"valid bytes", args{iOSSeed, "1.0.2"}, "1.0.2", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := applyVersionToiOSPlist(tt.args.data, tt.args.version)
+			if tt.shouldError {
+				require.Error(t, err)
+				return
+			}
+			require.NoError(t, err)
+			details := readiOSData(got)
+			assert.Equal(t, tt.want, details["CFBundleVersion"])
+		})
 	}
 }
 
@@ -71,4 +108,9 @@ var iOSSeed = []byte(`
 			<integer>4398046511104</integer>
 		</dict>
 	</plist>
+`)
+
+var invalidPlist = []byte(`
+	<?xml version="1.0" encoding="UTF-8"?>
+	<plist version="1.0">ist>
 `)
