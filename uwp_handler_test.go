@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-var uwp_filepath = "test/Package.appxmanifest"
+var uwpFilePath = "test/Package.appxmanifest"
 
 func Test_isUWPPackage(t *testing.T) {
 	type args struct {
@@ -30,7 +30,7 @@ func Test_isUWPPackage(t *testing.T) {
 }
 
 func Test_getUWPPackageInfo(t *testing.T) {
-	currentVersion := getUWPPackageInfo(uwp_filepath)
+	currentVersion := getUWPPackageInfo(uwpFilePath)
 	if currentVersion.Version != "1.0.1" {
 		t.Errorf("version mismatch; actual %v, expected %v", currentVersion.Version, "1.0.1")
 	}
@@ -40,13 +40,13 @@ func Test_getUWPPackageInfo(t *testing.T) {
 }
 
 func Test_changeUWPPackageVersion(t *testing.T) {
-	currentVersion := getUWPPackageInfo(uwp_filepath)
+	currentVersion := getUWPPackageInfo(uwpFilePath)
 	if currentVersion.Version != "1.0.1" {
 		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.1")
 	}
 
 	changeUWPPackageVersion(currentVersion, "1.0.2")
-	currentVersion = getUWPPackageInfo(uwp_filepath)
+	currentVersion = getUWPPackageInfo(uwpFilePath)
 	if currentVersion.Version != "1.0.2" {
 		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.2")
 	}
