@@ -32,6 +32,19 @@ func current(c *cli.Context) error {
 // called by executing `xavtool increment`
 func increment(c *cli.Context) error {
 	allFiles := findManifests(getWorkingDir())
+
+	// validations
+	if len(allFiles) == 0 {
+		return cli.NewExitError("No application has been found", 1)
+	}
+
+	for _, file := range allFiles {
+		if file.HasError {
+			return cli.NewExitError(fmt.Sprintf("Invalid file content:  %v", file.Path), 2)
+		}
+	}
+
+	// execute version update
 	for _, file := range allFiles {
 
 		newVersion := file.Version
@@ -67,6 +80,18 @@ func set(c *cli.Context) error {
 	}
 
 	allFiles := findManifests(getWorkingDir())
+	// validations
+	if len(allFiles) == 0 {
+		return cli.NewExitError("No application has been found", 1)
+	}
+
+	for _, file := range allFiles {
+		if file.HasError {
+			return cli.NewExitError(fmt.Sprintf("Invalid file content:  %v", file.Path), 2)
+		}
+	}
+
+	// execute version update
 	for _, file := range allFiles {
 		setVersion(file, newVersion)
 		fmt.Println(fmt.Sprintf("%v: New version: %v (%v)", file.Version, newVersion, file.Path))
