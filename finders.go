@@ -3,7 +3,6 @@ package main
 import (
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 type packageInfo struct {
@@ -11,9 +10,6 @@ type packageInfo struct {
 	Version string
 	Path    string
 }
-
-var files = []string{"info.plist", "androidmanifest.xml"}
-var ignoreFolders = []string{"bin", "obj", ".git"}
 
 func findManifests(root string) []packageInfo {
 	fileList := []packageInfo{}
@@ -24,13 +20,14 @@ func findManifests(root string) []packageInfo {
 			return filepath.SkipDir
 		}
 
-		if isManifestFile(f) {
-			if isiOsPackage(f.Name()) {
-				fileList = append(fileList, getiOSPackageInfo(path))
-			} else if isAndroidPackage(f.Name()) {
-				fileList = append(fileList, getAndroidPackageInfo(path))
-			}
+		if isiOsPackage(f.Name()) {
+			fileList = append(fileList, getiOSPackageInfo(path))
+		} else if isAndroidPackage(f.Name()) {
+			fileList = append(fileList, getAndroidPackageInfo(path))
+		} else if isUWPPackage(f.Name()) {
+			fileList = append(fileList, getUWPPackageInfo(path))
 		}
+
 		return nil
 	})
 
@@ -39,15 +36,7 @@ func findManifests(root string) []packageInfo {
 }
 
 func toBeIgnored(f os.FileInfo) bool {
-	if f.IsDir() && stringInSlice(f.Name(), ignoreFolders) {
-		return true
-	}
-	return false
-}
-
-func isManifestFile(f os.FileInfo) bool {
-	loweredFileName := strings.ToLower(f.Name())
-	if !f.IsDir() && stringInSlice(loweredFileName, files) {
+	if f.IsDir() && stringInSlice(f.Name(), []string{"bin", "obj", ".git"}) {
 		return true
 	}
 	return false

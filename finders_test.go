@@ -22,4 +22,8 @@ func TestFindManifests(t *testing.T) {
 	if !containsStructFieldValue(foundFiles, "Path", "AndroidManifest.xml") {
 		t.Errorf("test file androidmanifest.xml has not been found, expected %v", "test/AndroidManifest.xml")
 	}
+
+	if !containsStructFieldValue(foundFiles, "Path", "Package.appxmanifest") {
+		t.Errorf("test file package.appxmanifest has not been found, expected %v", "test/Package.appxmanifest")
+	}
 }

@@ -3,6 +3,8 @@ package main
 import (
 	"bytes"
 	"encoding/binary"
+	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/DHowett/go-plist"
@@ -34,17 +36,23 @@ func readiOSData(data []byte) map[string]interface{} {
 func changeiOSPackageVersion(file packageInfo, newVersion string) error {
 	// open file with all data
 	byteValue := readFile(file.Path)
-	processedBytes := applyVersionToiOSPlist(byteValue, newVersion)
+	processedBytes, err := applyVersionToiOSPlist(byteValue, newVersion)
+	if err != nil {
+		return fmt.Errorf("Invalid plist file: %v", file.Path)
+	}
 	saveFile(file.Path, processedBytes)
 	return nil
 }
 
-func applyVersionToiOSPlist(byteValue []byte, newVersion string) []byte {
+func applyVersionToiOSPlist(byteValue []byte, newVersion string) ([]byte, error) {
 	buffer := bytes.NewReader(byteValue)
 	decoder := plist.NewDecoder(buffer)
 	var data = map[string]interface{}{}
 	err := decoder.Decode(&data)
-	check(err)
+
+	if err != nil {
+		return nil, errors.New("Invalid plist")
+	}
 
 	// increment version
 	data["CFBundleVersion"] = newVersion
@@ -60,5 +68,5 @@ func applyVersionToiOSPlist(byteValue []byte, newVersion string) []byte {
 	err = encoder.Encode(data)
 	check(err)
 
-	return bufferedData.Bytes()
+	return bufferedData.Bytes(), nil
 }
