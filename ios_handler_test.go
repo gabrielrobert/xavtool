@@ -85,8 +85,7 @@ func Test_applyVersionToiOSPlist(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			details := readiOSData(got)
-			assert.Equal(t, tt.want, details["CFBundleVersion"])
+			assert.Equal(t, tt.want, readiOSData(got)["CFBundleVersion"])
 		})
 	}
 }
