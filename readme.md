@@ -25,10 +25,6 @@ $ scoop bucket add gabrielrobert-bucket https://github.com/gabrielrobert/scoop-b
 $ scoop install xavtool
 ```
 
-Using binaries:
-
-> Download executables on the [release page](https://github.com/gabrielrobert/xavtool/releases/latest).
-
 ### macOS:
 
 Using brew:
@@ -37,6 +33,10 @@ Using brew:
 $ brew install gabrielrobert/tap/xavtool
 $ xavtool --version
 ```
+
+### Binaries
+
+Download executables on the [release page](https://github.com/gabrielrobert/xavtool/releases/latest).
 
 ### From source:
 
