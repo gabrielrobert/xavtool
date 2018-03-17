@@ -70,11 +70,14 @@ func applyVersionToAndroidXML(data []byte, newVersion string) []byte {
 		acmt = strings.Replace(newVersion, ".", "", -1)
 		mxj.Map(vmap).SetValueForPath(acmt, "#attr.android:versionCode.#text")
 		err = m.SetValueForPath(vmap, "manifest")
-
 		check(err)
+
 		b, err := m.XmlSeqIndent("", "  ")
 		check(err)
-		return b
+
+		// Write header
+		header := `<?xml version="1.0" encoding="utf-8"?>` + "\n"
+		return []byte(header + string(b))
 	}
 
 	return nil

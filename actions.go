@@ -70,5 +70,7 @@ func setVersion(file packageInfo, version string) {
 		changeiOSPackageVersion(file, version)
 	} else if isAndroidPackage(file.Path) {
 		changeAndroidPackageVersion(file, version)
+	} else if isUWPPackage(file.Path) {
+		changeUWPPackageVersion(file, version)
 	}
 }
