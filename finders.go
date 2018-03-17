@@ -24,6 +24,8 @@ func findManifests(root string) []packageInfo {
 			fileList = append(fileList, getiOSPackageInfo(path))
 		} else if isAndroidPackage(f.Name()) {
 			fileList = append(fileList, getAndroidPackageInfo(path))
+		} else if isUWPPackage(f.Name()) {
+			fileList = append(fileList, getUWPPackageInfo(path))
 		}
 
 		return nil
