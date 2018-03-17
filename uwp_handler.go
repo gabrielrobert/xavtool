@@ -30,7 +30,12 @@ func isUWPPackage(filename string) bool {
 
 func getUWPPackageInfo(filePath string) packageInfo {
 	byteValue := readFile(filePath)
-	data := readUWPData(byteValue)
+	data, err := readUWPData(byteValue)
+
+	if err != nil {
+		return packageInfo{Path: filePath, HasError: true}
+	}
+
 	return packageInfo{
 		Name:    data.Properties.Name,
 		Version: data.Identity.Version,
@@ -38,10 +43,10 @@ func getUWPPackageInfo(filePath string) packageInfo {
 	}
 }
 
-func readUWPData(data []byte) *uwpBundlerHeader {
+func readUWPData(data []byte) (*uwpBundlerHeader, error) {
 	var header uwpBundlerHeader
-	xml.Unmarshal(data, &header)
-	return &header
+	err := xml.Unmarshal(data, &header)
+	return &header, err
 }
 
 func changeUWPPackageVersion(file packageInfo, newVersion string) error {

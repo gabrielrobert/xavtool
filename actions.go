@@ -9,10 +9,19 @@ import (
 // called by executing `xavtool current`
 func current(c *cli.Context) error {
 	allFiles := findManifests(getWorkingDir())
+
+	// validations
 	if len(allFiles) == 0 {
 		return cli.NewExitError("No application has been found", 1)
 	}
 
+	for _, file := range allFiles {
+		if file.HasError {
+			return cli.NewExitError(fmt.Sprintf("Invalid file content:  %v", file.Path), 2)
+		}
+	}
+
+	// show packages
 	for _, file := range allFiles {
 		fmt.Println(fmt.Sprintf("%v - %v (%v)", file.Version, file.Name, file.Path))
 	}

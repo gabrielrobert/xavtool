@@ -84,8 +84,38 @@ func Test_applyVersionToiOSPlist(t *testing.T) {
 				require.Error(t, err)
 				return
 			}
+
+			data, _ := readiOSData(got)
+
 			require.NoError(t, err)
-			assert.Equal(t, tt.want, readiOSData(got)["CFBundleVersion"])
+			assert.Equal(t, tt.want, data["CFBundleVersion"])
+		})
+	}
+}
+
+func Test_readiOSData(t *testing.T) {
+	type args struct {
+		data []byte
+	}
+	tests := []struct {
+		name        string
+		args        args
+		want        string
+		shouldError bool
+	}{
+		{"invalid bytes", args{invalidPlist}, "", true},
+		{"valid file", args{readFile("test/Info.plist")}, "1.0.1", false},
+		{"valid bytes", args{iOSSeed}, "1.0.1", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := readiOSData(tt.args.data)
+			if tt.shouldError {
+				require.Error(t, err)
+				return
+			}
+			require.NoError(t, err)
+			assert.Equal(t, tt.want, got["CFBundleVersion"])
 		})
 	}
 }
@@ -97,6 +127,8 @@ var iOSSeed = []byte(`
 		<dict>
 			<key>CFBundleInfoDictionaryVersion</key>
 			<string>6.0</string>
+			<key>CFBundleVersion</key>
+			<string>1.0.1</string>
 			<key>band-size</key>
 			<integer>8388608</integer>
 			<key>bundle-backingstore-version</key>
@@ -111,5 +143,5 @@ var iOSSeed = []byte(`
 
 var invalidPlist = []byte(`
 	<?xml version="1.0" encoding="UTF-8"?>
-	<plist version="1.0">ist>
+	<plist ve/
 `)

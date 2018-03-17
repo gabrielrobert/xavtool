@@ -16,7 +16,12 @@ func isiOsPackage(filename string) bool {
 
 func getiOSPackageInfo(filePath string) packageInfo {
 	byteValue := readFile(filePath)
-	data := readiOSData(byteValue)
+	data, err := readiOSData(byteValue)
+
+	if err != nil {
+		return packageInfo{Path: filePath, HasError: true}
+	}
+
 	return packageInfo{
 		Name:    data["CFBundleDisplayName"].(string),
 		Version: data["CFBundleVersion"].(string),
@@ -24,13 +29,12 @@ func getiOSPackageInfo(filePath string) packageInfo {
 	}
 }
 
-func readiOSData(data []byte) map[string]interface{} {
+func readiOSData(data []byte) (map[string]interface{}, error) {
 	buffer := bytes.NewReader(data)
 	decoder := plist.NewDecoder(buffer)
 	var decodeInterface = map[string]interface{}{}
 	err := decoder.Decode(&decodeInterface)
-	check(err)
-	return decodeInterface
+	return decodeInterface, err
 }
 
 func changeiOSPackageVersion(file packageInfo, newVersion string) error {
