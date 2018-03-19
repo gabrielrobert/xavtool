@@ -27,7 +27,7 @@ $ scoop install xavtool
 
 ### macOS:
 
-Using brew:
+Using [brew](https://brew.sh/):
 
 ```bash
 $ brew install gabrielrobert/tap/xavtool
@@ -59,7 +59,7 @@ USAGE:
    xavtool [global options] command [command options] [arguments...]
 
 VERSION:
-   0.11.2
+   0.11.3
 
 AUTHOR:
    Gabriel Robert <g.robert092@gmail.com>
@@ -73,6 +73,15 @@ COMMANDS:
 GLOBAL OPTIONS:
    --help, -h     show help
    --version, -v  print the version
+```
+
+### Typical flow
+
+```bash
+$ git flow release start '1.16.0'
+$ xavtool i
+$ git commit -am "Version bump to 1.16.0"
+$ git flow release finish -p
 ```
 
 ### increment

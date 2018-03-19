@@ -3,8 +3,8 @@ $ErrorActionPreference = 'Stop';
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $distDir = (get-item $toolsDir ).parent.FullName
 
-$fileLocation = Join-Path $distDir 'dist/windows_386/xavtool.exe'
-$fileLocation64 = Join-Path $distDir 'dist/windows_amd64/xavtool.exe'
+$fileLocation = Join-Path $toolsDir 'x86/xavtool.exe'
+$fileLocation64 = Join-Path $toolsDir 'x64/xavtool.exe'
 
 Write-Host $fileLocation
 

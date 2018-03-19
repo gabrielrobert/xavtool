@@ -2,10 +2,11 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>xavtool</id>
-    <version>0.11.2</version>
+    <version>0.11.3</version>
     <title>xavtool</title>
     <authors>gabrielrobert</authors>
     <projectUrl>https://github.com/gabrielrobert/xavtool</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/gabrielrobert/xavtool/master/_assets/xavtool_64x64.png</iconUrl>
     <projectSourceUrl>https://github.com/gabrielrobert/xavtool</projectSourceUrl>
     <packageSourceUrl>https://github.com/gabrielrobert/xavtool</packageSourceUrl>
     <docsUrl>https://github.com/gabrielrobert/xavtool</docsUrl>
@@ -17,6 +18,7 @@
     <releaseNotes>Visit https://github.com/gabrielrobert/xavtool/releases/latest</releaseNotes>
   </metadata>
   <files>
-    <file src="dist\windows_**" target="dist" />
+    <file src="dist\windows_386\**" target="tools/x86" />
+    <file src="dist\windows_amd64\**" target="tools/x64" />
   </files>
 </package>
