@@ -59,7 +59,7 @@ USAGE:
    xavtool [global options] command [command options] [arguments...]
 
 VERSION:
-   0.11.3
+   1.0.0
 
 AUTHOR:
    Gabriel Robert <g.robert092@gmail.com>
