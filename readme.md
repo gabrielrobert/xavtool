@@ -104,9 +104,9 @@ USAGE:
 
 ```bash
 $ xavtool current
-1.1.0 - androidApp (...\test\AndroidManifest.xml)
-1.1.0 - iOSApp (...\test\Info.plist)
-1.1.0 - uwpApp (...\test\Package.appxmanifest)
+1.0.1 - androidApp (...\test\AndroidManifest.xml)
+1.0.1 - iOSApp (...\test\Info.plist)
+1.0.1 - uwpApp (...\test\Package.appxmanifest)
 
 $ git flow release start '1.16.0'
 
