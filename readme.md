@@ -84,6 +84,13 @@ $ git commit -am "Version bump to 1.16.0"
 $ git flow release finish -p
 ```
 
+It will update these files:
+
+- `Info.plist`
+- `AndroidManifest.xml`
+- `Package.appxmanifest`
+
+
 ### increment
 ```bash
 $ xavtool increment --help
