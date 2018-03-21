@@ -108,14 +108,14 @@ $ xavtool current
 1.0.1 - iOSApp (...\test\Info.plist)
 1.0.1 - uwpApp (...\test\Package.appxmanifest)
 
-$ git flow release start '1.16.0'
+$ git flow release start '1.1.0'
 
 $ xavtool i
 1.0.1: New version: 1.1.0 (...\test\AndroidManifest.xml)
 1.0.1: New version: 1.1.0 (...\test\Info.plist)
 1.0.1: New version: 1.1.0 (...\test\Package.appxmanifest)
 
-$ git commit -am "Version bump to 1.16.0"
+$ git commit -am "Version bump to 1.1.0"
 $ git flow release finish -p
 ```
 
