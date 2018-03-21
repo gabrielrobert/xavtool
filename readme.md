@@ -116,6 +116,114 @@ USAGE:
    xavtool set [arguments...]
 ```
 
+## Results
+
+### Info.plist
+
+Only these values will be edited:
+
+1) `CFBundleShortVersionString` (new version)
+2) `CFBundleVersion` (new version)
+
+Before:
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <!-- ... -->
+        <key>CFBundleShortVersionString</key>
+        <string>1.0.1</string>
+        <key>CFBundleVersion</key>
+        <string>1.0.1</string>
+        <!-- ... -->
+    </dict>
+</plist>
+```
+
+After:
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <!-- ... -->
+        <key>CFBundleShortVersionString</key>
+        <string>1.1.0</string>
+        <key>CFBundleVersion</key>
+        <string>1.1.0</string>
+        <!-- ... -->
+    </dict>
+</plist>
+```
+
+### AndroidManifest.xml
+
+Only these values will be edited:
+
+1) `manifest/@android:versionName` (new version)
+2) `manifest/@android:versionCode` (new version without dots)
+
+Before:
+```
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+    package="com.example.xavtool" 
+    android:versionCode="101"
+    android:versionName="1.0.1">
+    <!-- ... -->
+</manifest>
+```
+
+After:
+```
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+        package="com.example.xavtool" 
+        android:versionCode="110" 
+        android:versionName="1.1.0">
+    <!-- ... -->
+</manifest>
+```
+
+### Package.appxmanifest
+
+Only these values will be edited:
+
+1) `Package/Identity/@Version` (new version)
+
+Before:
+```
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+    xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+    xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+    xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
+    
+    <!-- ... -->
+    <Identity Name="95748d56-342b-4dae-93f5-aeda0587a1c0" Publisher="CN=gabrielrobert" Version="1.0.1"/>
+    <!-- ... -->
+    
+</Package>
+```
+
+After:
+```
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+    xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+    xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+    xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
+    
+    <!-- ... -->
+    <Identity Name="95748d56-342b-4dae-93f5-aeda0587a1c0" Publisher="CN=gabrielrobert" Version="1.1.0"/>
+    <!-- ... -->
+    
+</Package>
+```
+
 ## Support
 
 Please [open an issue](https://github.com/gabrielrobert/xavtool/issues/new) for support.
