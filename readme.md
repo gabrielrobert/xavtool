@@ -109,6 +109,7 @@ $ xavtool current
 1.1.0 - uwpApp (...\test\Package.appxmanifest)
 
 $ git flow release start '1.16.0'
+
 $ xavtool i
 1.0.1: New version: 1.1.0 (...\test\AndroidManifest.xml)
 1.0.1: New version: 1.1.0 (...\test\Info.plist)
