@@ -126,7 +126,7 @@ Only these values will be edited:
 2) `CFBundleVersion` (new version)
 
 Before:
-```
+```plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -142,7 +142,7 @@ Before:
 ```
 
 After:
-```
+```plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -165,7 +165,7 @@ Only these values will be edited:
 2) `manifest/@android:versionCode` (new version without dots)
 
 Before:
-```
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android" 
@@ -177,7 +177,7 @@ Before:
 ```
 
 After:
-```
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android" 
@@ -195,7 +195,7 @@ Only these values will be edited:
 1) `Package/Identity/@Version` (new version)
 
 Before:
-```
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <Package
     xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
@@ -210,7 +210,7 @@ Before:
 ```
 
 After:
-```
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <Package
     xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
