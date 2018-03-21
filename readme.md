@@ -75,22 +75,6 @@ GLOBAL OPTIONS:
    --version, -v  print the version
 ```
 
-### Typical flow
-
-```bash
-$ git flow release start '1.16.0'
-$ xavtool i
-$ git commit -am "Version bump to 1.16.0"
-$ git flow release finish -p
-```
-
-It will update these files:
-
-- `Info.plist`
-- `AndroidManifest.xml`
-- `Package.appxmanifest`
-
-
 ### increment
 ```bash
 $ xavtool increment --help
@@ -115,6 +99,21 @@ NAME:
 USAGE:
    xavtool set [arguments...]
 ```
+
+## Typical flow
+
+```bash
+$ git flow release start '1.16.0'
+$ xavtool i
+$ git commit -am "Version bump to 1.16.0"
+$ git flow release finish -p
+```
+
+It will update these files:
+
+- `Info.plist`
+- `AndroidManifest.xml`
+- `Package.appxmanifest`
 
 ## Results
 
