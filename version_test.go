@@ -92,3 +92,25 @@ func Test_isVersion(t *testing.T) {
 		})
 	}
 }
+
+func Test_buildAndroidVersionCode(t *testing.T) {
+	type args struct {
+		version string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{"1.99.1", args{"1.99.1"}, "1990100"},
+		{"2.0.0", args{"2.0.0"}, "2000000"},
+		{"0.0.0", args{"0.0.0"}, "0"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := buildAndroidVersionCode(tt.args.version); got != tt.want {
+				t.Errorf("buildAndroidVersionCode() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
