@@ -14,7 +14,7 @@ Command-line utility to automatically increase iOS / Android / UWP applications 
 Using [Chocolatey](https://chocolatey.org/):
 
 ```bash
-$ choco install xavtool
+$ choco install xavtool -version 1.1.0
 $ xavtool --version
 ```
 
@@ -59,7 +59,7 @@ USAGE:
    xavtool [global options] command [command options] [arguments...]
 
 VERSION:
-   1.0.0
+   1.1.0
 
 AUTHOR:
    Gabriel Robert <g.robert092@gmail.com>
