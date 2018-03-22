@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"strconv"
+
 	"github.com/Masterminds/semver"
 )
 
@@ -34,4 +37,18 @@ func isVersion(version string) bool {
 		return false
 	}
 	return true
+}
+
+func buildAndroidVersionCode(version string) string {
+	parsedVersion := parse(version)
+
+	versionCode := parsedVersion.Major() * 1000000
+	versionCode += parsedVersion.Minor() * 10000
+	versionCode += parsedVersion.Patch() * 100
+
+	if versionCode > 2000000000 {
+		panic(fmt.Sprintf("Android versionCode cannot be greater than %v", 2000000000))
+	}
+
+	return strconv.FormatInt(versionCode, 10)
 }
