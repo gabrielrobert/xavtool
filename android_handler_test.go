@@ -59,8 +59,8 @@ func Test_applyVersionToAndroidXML(t *testing.T) {
 	if xml.VersionName != "1.0.2" {
 		t.Errorf("VersionName mismatch; expected %v", "1.0.2")
 	}
-	if xml.Code != "102" {
-		t.Errorf("code mismatch; expected %v", "102")
+	if xml.Code != "1000200" {
+		t.Errorf("code mismatch; actual %v, expected %v", xml.Code, "1000200")
 	}
 }
 
