@@ -72,7 +72,7 @@ func applyVersionToAndroidXML(data []byte, newVersion string) []byte {
 
 		// edit versionCode attr
 		acmt, err = mxj.Map(vmap).ValueForPath("#attr.android:versionCode.#text")
-		acmt = strings.Replace(newVersion, ".", "", -1)
+		acmt = buildAndroidVersionCode(newVersion)
 		mxj.Map(vmap).SetValueForPath(acmt, "#attr.android:versionCode.#text")
 		err = m.SetValueForPath(vmap, "manifest")
 		check(err)
