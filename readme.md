@@ -171,7 +171,7 @@ After:
 Only these values will be edited:
 
 1) `manifest/@android:versionName` (new version)
-2) `manifest/@android:versionCode` (new version without dots)
+2) `manifest/@android:versionCode` (integer computed this way: `(major * 1000000) + (minor * 10000) + (patch * 100)`)        
 
 Before:
 ```xml
@@ -179,7 +179,7 @@ Before:
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android" 
     package="com.example.xavtool" 
-    android:versionCode="101"
+    android:versionCode="1000100"
     android:versionName="1.0.1">
     <!-- ... -->
 </manifest>
@@ -191,7 +191,7 @@ After:
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android" 
         package="com.example.xavtool" 
-        android:versionCode="110" 
+        android:versionCode="1010000" 
         android:versionName="1.1.0">
     <!-- ... -->
 </manifest>
