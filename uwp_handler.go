@@ -71,7 +71,7 @@ func applyVersionToUWPXML(data []byte, newVersion string) []byte {
 
 		// edit Version attr
 		acmt, err := mxj.Map(vmap).ValueForPath("#attr.Version.#text")
-		acmt = newVersion
+		acmt = buildUWPVersion(newVersion)
 		mxj.Map(vmap).SetValueForPath(acmt, "#attr.Version.#text")
 		err = m.SetValueForPath(vmap, "Package.Identity")
 		check(err)
