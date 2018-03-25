@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/Masterminds/semver"
 )
@@ -26,6 +27,11 @@ func incrementPatch(version string) string {
 }
 
 func parse(version string) *semver.Version {
+	if !isVersion(version) {
+		segments := strings.Split(version, ".")
+		version = fmt.Sprintf("%v.%v.%v", segments[0], segments[1], segments[2])
+	}
+
 	parsedVersion, err := semver.NewVersion(version)
 	check(err)
 	return parsedVersion

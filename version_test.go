@@ -2,6 +2,8 @@ package main
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_incrementMajor(t *testing.T) {
@@ -68,6 +70,12 @@ func Test_incrementPatch(t *testing.T) {
 			}
 		})
 	}
+}
+
+func Test_parse(t *testing.T) {
+	t.Run("parse version with revision", func(t *testing.T) {
+		assert.NotPanics(t, func() { parse("0.0.0.0") })
+	})
 }
 
 func Test_isVersion(t *testing.T) {
