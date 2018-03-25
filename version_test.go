@@ -2,6 +2,8 @@ package main
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_incrementMajor(t *testing.T) {
@@ -70,6 +72,12 @@ func Test_incrementPatch(t *testing.T) {
 	}
 }
 
+func Test_parse(t *testing.T) {
+	t.Run("parse version with revision", func(t *testing.T) {
+		assert.NotPanics(t, func() { parse("0.0.0.0") })
+	})
+}
+
 func Test_isVersion(t *testing.T) {
 	type args struct {
 		version string
@@ -112,6 +120,30 @@ func Test_buildAndroidVersionCode(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := buildAndroidVersionCode(tt.args.version); got != tt.want {
 				t.Errorf("buildAndroidVersionCode() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_buildUWPVersion(t *testing.T) {
+	type args struct {
+		version string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{"1.99.1", args{"1.99.1"}, "1.99.1.0"},
+		{"2.0.0", args{"2.0.0"}, "2.0.0.0"},
+		{"1.0.1", args{"1.0.1"}, "1.0.1.0"},
+		{"1.1.0", args{"1.1.0"}, "1.1.0.0"},
+		{"0.0.0", args{"0.0.0"}, "0.0.0.0"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := buildUWPVersion(tt.args.version); got != tt.want {
+				t.Errorf("buildUWPVersion() = %v, want %v", got, tt.want)
 			}
 		})
 	}

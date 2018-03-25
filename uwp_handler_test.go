@@ -34,8 +34,8 @@ func Test_isUWPPackage(t *testing.T) {
 
 func Test_getUWPPackageInfo(t *testing.T) {
 	currentVersion := getUWPPackageInfo(uwpFilePath)
-	if currentVersion.Version != "1.0.1" {
-		t.Errorf("version mismatch; actual %v, expected %v", currentVersion.Version, "1.0.1")
+	if currentVersion.Version != "1.0.1.0" {
+		t.Errorf("version mismatch; actual %v, expected %v", currentVersion.Version, "1.0.1.0")
 	}
 	if currentVersion.Name != "xavtool" {
 		t.Errorf("name mismatch; actual %v, expected %v", currentVersion.Name, "xavtool")
@@ -44,14 +44,14 @@ func Test_getUWPPackageInfo(t *testing.T) {
 
 func Test_changeUWPPackageVersion(t *testing.T) {
 	currentVersion := getUWPPackageInfo(uwpFilePath)
-	if currentVersion.Version != "1.0.1" {
-		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.1")
+	if currentVersion.Version != "1.0.1.0" {
+		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.1.0")
 	}
 
 	changeUWPPackageVersion(currentVersion, "1.0.2")
 	currentVersion = getUWPPackageInfo(uwpFilePath)
-	if currentVersion.Version != "1.0.2" {
-		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.2")
+	if currentVersion.Version != "1.0.2.0" {
+		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.2.0")
 	}
 
 	// some kind of rollback
@@ -61,8 +61,8 @@ func Test_changeUWPPackageVersion(t *testing.T) {
 func Test_applyVersionToUWPXML(t *testing.T) {
 	processedBytes := applyVersionToUWPXML(uwpSeed, "1.0.2")
 	xml, _ := readUWPData(processedBytes)
-	if xml.Identity.Version != "1.0.2" {
-		t.Errorf("VersionName mismatch; expected %v, got %v", "1.0.2", xml.Identity.Version)
+	if xml.Identity.Version != "1.0.2.0" {
+		t.Errorf("VersionName mismatch; expected %v, got %v", "1.0.2.0", xml.Identity.Version)
 	}
 }
 
@@ -77,7 +77,7 @@ func Test_readUWPData(t *testing.T) {
 		shouldError bool
 	}{
 		{"invalid bytes", args{invalidUWPSeed}, "", true},
-		{"valid file", args{readFile("test/Package.appxmanifest")}, "1.0.1", false},
+		{"valid file", args{readFile("test/Package.appxmanifest")}, "1.0.1.0", false},
 		{"valid bytes", args{uwpSeed}, "1.0.1", false},
 	}
 	for _, tt := range tests {
