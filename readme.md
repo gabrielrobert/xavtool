@@ -201,7 +201,7 @@ After:
 
 Only these values will be edited:
 
-1) `Package/Identity/@Version` (new version)
+1) `Package/Identity/@Version` (new version with a dummy revision set to 0)
 
 Before:
 ```xml
@@ -212,7 +212,7 @@ Before:
     xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
     
     <!-- ... -->
-    <Identity Name="95748d56-342b-4dae-93f5-aeda0587a1c0" Publisher="CN=gabrielrobert" Version="1.0.1"/>
+    <Identity Name="95748d56-342b-4dae-93f5-aeda0587a1c0" Publisher="CN=gabrielrobert" Version="1.0.1.0"/>
     <!-- ... -->
     
 </Package>
@@ -227,7 +227,7 @@ After:
     xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
     
     <!-- ... -->
-    <Identity Name="95748d56-342b-4dae-93f5-aeda0587a1c0" Publisher="CN=gabrielrobert" Version="1.1.0"/>
+    <Identity Name="95748d56-342b-4dae-93f5-aeda0587a1c0" Publisher="CN=gabrielrobert" Version="1.1.0.0"/>
     <!-- ... -->
     
 </Package>
