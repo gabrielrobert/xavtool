@@ -52,3 +52,7 @@ func buildAndroidVersionCode(version string) string {
 
 	return strconv.FormatInt(versionCode, 10)
 }
+
+func buildUWPVersion(version string) string {
+	return version + ".0"
+}
