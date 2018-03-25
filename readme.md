@@ -201,7 +201,7 @@ After:
 
 Only these values will be edited:
 
-1) `Package/Identity/@Version` (new version with a dummy revision set to 0)
+1) `Package/Identity/@Version` (new version with a revision number set to 0)
 
 Before:
 ```xml
