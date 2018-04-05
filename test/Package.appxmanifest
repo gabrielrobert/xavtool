@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="95748d56-342b-4dae-93f5-aeda0587a1c0" Publisher="CN=gabrielrobert" Version="1.0.1"/>
+  <Identity Name="95748d56-342b-4dae-93f5-aeda0587a1c0" Publisher="CN=gabrielrobert" Version="1.0.1.0"/>
   <mp:PhoneIdentity PhoneProductId="95748d56-342b-4dae-93f5-aeda0587a1c0" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
   <Properties>
     <DisplayName>xavtool</DisplayName>

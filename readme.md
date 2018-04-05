@@ -14,7 +14,7 @@ Command-line utility to automatically increase iOS / Android / UWP applications 
 Using [Chocolatey](https://chocolatey.org/):
 
 ```bash
-$ choco install xavtool -version 1.1.0
+$ choco install xavtool -version 1.1.1
 $ xavtool --version
 ```
 
@@ -59,7 +59,7 @@ USAGE:
    xavtool [global options] command [command options] [arguments...]
 
 VERSION:
-   1.1.0
+   1.1.1
 
 AUTHOR:
    Gabriel Robert <g.robert092@gmail.com>
@@ -106,14 +106,14 @@ USAGE:
 $ xavtool current
 1.0.1 - androidApp (...\test\AndroidManifest.xml)
 1.0.1 - iOSApp (...\test\Info.plist)
-1.0.1 - uwpApp (...\test\Package.appxmanifest)
+1.0.1.0 - uwpApp (...\test\Package.appxmanifest)
 
 $ git flow release start '1.1.0'
 
 $ xavtool i
 1.0.1: New version: 1.1.0 (...\test\AndroidManifest.xml)
 1.0.1: New version: 1.1.0 (...\test\Info.plist)
-1.0.1: New version: 1.1.0 (...\test\Package.appxmanifest)
+1.0.1.0: New version: 1.1.0.0 (...\test\Package.appxmanifest)
 
 $ git commit -am "Version bump to 1.1.0"
 $ git flow release finish -p
@@ -171,7 +171,7 @@ After:
 Only these values will be edited:
 
 1) `manifest/@android:versionName` (new version)
-2) `manifest/@android:versionCode` (new version without dots)
+2) `manifest/@android:versionCode` (integer computed this way: `(major * 1000000) + (minor * 10000) + (patch * 100)`)        
 
 Before:
 ```xml
@@ -179,7 +179,7 @@ Before:
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android" 
     package="com.example.xavtool" 
-    android:versionCode="101"
+    android:versionCode="1000100"
     android:versionName="1.0.1">
     <!-- ... -->
 </manifest>
@@ -191,7 +191,7 @@ After:
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android" 
         package="com.example.xavtool" 
-        android:versionCode="110" 
+        android:versionCode="1010000" 
         android:versionName="1.1.0">
     <!-- ... -->
 </manifest>
@@ -201,7 +201,7 @@ After:
 
 Only these values will be edited:
 
-1) `Package/Identity/@Version` (new version)
+1) `Package/Identity/@Version` (new version with a revision number set to 0)
 
 Before:
 ```xml
@@ -212,7 +212,7 @@ Before:
     xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
     
     <!-- ... -->
-    <Identity Name="95748d56-342b-4dae-93f5-aeda0587a1c0" Publisher="CN=gabrielrobert" Version="1.0.1"/>
+    <Identity Name="95748d56-342b-4dae-93f5-aeda0587a1c0" Publisher="CN=gabrielrobert" Version="1.0.1.0"/>
     <!-- ... -->
     
 </Package>
@@ -227,7 +227,7 @@ After:
     xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
     
     <!-- ... -->
-    <Identity Name="95748d56-342b-4dae-93f5-aeda0587a1c0" Publisher="CN=gabrielrobert" Version="1.1.0"/>
+    <Identity Name="95748d56-342b-4dae-93f5-aeda0587a1c0" Publisher="CN=gabrielrobert" Version="1.1.0.0"/>
     <!-- ... -->
     
 </Package>

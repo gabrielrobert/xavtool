@@ -68,7 +68,8 @@ func increment(c *cli.Context) error {
 		}
 
 		setVersion(file, newVersion)
-		fmt.Println(fmt.Sprintf("%v: New version: %v (%v)", file.Version, newVersion, file.Path))
+		updatedManifest := findManifests(file.Path)[0]
+		fmt.Println(fmt.Sprintf("%v: New version: %v (%v)", file.Version, updatedManifest.Version, file.Path))
 	}
 	return nil
 }
@@ -107,7 +108,8 @@ func set(c *cli.Context) error {
 	// execute version update
 	for _, file := range allFiles {
 		setVersion(file, newVersion)
-		fmt.Println(fmt.Sprintf("%v: New version: %v (%v)", file.Version, newVersion, file.Path))
+		updatedManifest := findManifests(file.Path)[0]
+		fmt.Println(fmt.Sprintf("%v: New version: %v (%v)", file.Version, updatedManifest.Version, file.Path))
 	}
 	return nil
 }
