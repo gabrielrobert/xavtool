@@ -8,33 +8,53 @@ import (
 	"strings"
 
 	"github.com/DHowett/go-plist"
+	multierror "github.com/hashicorp/go-multierror"
 )
 
 func isiOsPackage(filename string) bool {
 	return strings.ToLower(getFilename(filename)) == "info.plist"
 }
 
-func getiOSPackageInfo(filePath string) packageInfo {
+func getiOSPackageInfo(filePath string) (packageInfo, error) {
 	byteValue := readFile(filePath)
 	data, err := readiOSData(byteValue)
 
 	if err != nil {
-		return packageInfo{Path: filePath, HasError: true}
+		return packageInfo{Path: filePath, HasError: true}, err
 	}
 
 	return packageInfo{
 		Name:    data["CFBundleDisplayName"].(string),
 		Version: data["CFBundleVersion"].(string),
 		Path:    filePath,
-	}
+	}, nil
 }
 
 func readiOSData(data []byte) (map[string]interface{}, error) {
+	var result error
+
 	buffer := bytes.NewReader(data)
 	decoder := plist.NewDecoder(buffer)
 	var decodeInterface = map[string]interface{}{}
 	err := decoder.Decode(&decodeInterface)
-	return decodeInterface, err
+
+	if err != nil {
+		return decodeInterface, err
+	}
+
+	if _, exists := decodeInterface["CFBundleDisplayName"]; !exists {
+		result = multierror.Append(result, fmt.Errorf("Missing property %v", "CFBundleDisplayName"))
+	}
+
+	if _, exists := decodeInterface["CFBundleVersion"]; !exists {
+		result = multierror.Append(result, fmt.Errorf("Missing property %v", "CFBundleVersion"))
+	}
+
+	if _, exists := decodeInterface["CFBundleShortVersionString"]; !exists {
+		result = multierror.Append(result, fmt.Errorf("Missing property %v", "CFBundleShortVersionString"))
+	}
+
+	return decodeInterface, result
 }
 
 func changeiOSPackageVersion(file packageInfo, newVersion string) error {

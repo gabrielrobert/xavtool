@@ -3,6 +3,8 @@ package main
 import (
 	"os"
 	"path/filepath"
+
+	"github.com/hashicorp/go-multierror"
 )
 
 type packageInfo struct {
@@ -12,17 +14,22 @@ type packageInfo struct {
 	HasError bool
 }
 
-func findManifests(root string) []packageInfo {
+func findManifests(root string) ([]packageInfo, error) {
+	var result error
 	fileList := []packageInfo{}
 
 	err := filepath.Walk(root, func(path string, f os.FileInfo, err error) error {
 
-		if toBeIgnored(f) {
+		if isIgnored(f) {
 			return filepath.SkipDir
 		}
 
 		if isiOsPackage(f.Name()) {
-			fileList = append(fileList, getiOSPackageInfo(path))
+			pkg, err := getiOSPackageInfo(path)
+			fileList = append(fileList, pkg)
+			if err != nil {
+				result = multierror.Append(result, err)
+			}
 		} else if isAndroidPackage(f.Name()) {
 			fileList = append(fileList, getAndroidPackageInfo(path))
 		} else if isUWPPackage(f.Name()) {
@@ -32,11 +39,14 @@ func findManifests(root string) []packageInfo {
 		return nil
 	})
 
-	check(err)
-	return fileList
+	if err != nil {
+		result = multierror.Append(result, err)
+	}
+
+	return fileList, result
 }
 
-func toBeIgnored(f os.FileInfo) bool {
+func isIgnored(f os.FileInfo) bool {
 	if f.IsDir() && stringInSlice(f.Name(), []string{"bin", "obj", ".git"}) {
 		return true
 	}
