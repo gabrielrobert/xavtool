@@ -48,7 +48,7 @@ func increment(c *cli.Context) error {
 
 	for _, file := range allFiles {
 		if file.HasError {
-			return cli.NewExitError(fmt.Sprintf("Invalid file content:  %v", file.Path), 2)
+			return cli.NewExitError(fmt.Sprintf("Invalid file content:  %v", file.Path), 3)
 		}
 	}
 
@@ -64,12 +64,17 @@ func increment(c *cli.Context) error {
 		case "patch":
 			newVersion = incrementPatch(file.Version)
 		default:
-			return cli.NewExitError(fmt.Sprintf("Invalid type %v", incrementType), 1)
+			return cli.NewExitError(fmt.Sprintf("Invalid type %v", incrementType), 4)
 		}
 
 		setVersion(file, newVersion)
-		updatedManifest := findManifests(file.Path)[0]
-		fmt.Println(fmt.Sprintf("%v: New version: %v (%v)", file.Version, updatedManifest.Version, file.Path))
+		updatedManifest, err := findManifests(file.Path)
+
+		if err != nil {
+			return cli.NewExitError(err, 5)
+		}
+
+		fmt.Println(fmt.Sprintf("%v: New version: %v (%v)", file.Version, updatedManifest[0].Version, file.Path))
 	}
 	return nil
 }
@@ -92,24 +97,29 @@ func set(c *cli.Context) error {
 
 	// validations
 	if err != nil {
-		return cli.NewExitError(err, 1)
+		return cli.NewExitError(err, 4)
 	}
 
 	if len(allFiles) == 0 {
-		return cli.NewExitError("No application has been found", 2)
+		return cli.NewExitError("No application has been found", 5)
 	}
 
 	for _, file := range allFiles {
 		if file.HasError {
-			return cli.NewExitError(fmt.Sprintf("Invalid file content:  %v", file.Path), 2)
+			return cli.NewExitError(fmt.Sprintf("Invalid file content:  %v", file.Path), 6)
 		}
 	}
 
 	// execute version update
 	for _, file := range allFiles {
 		setVersion(file, newVersion)
-		updatedManifest := findManifests(file.Path)[0]
-		fmt.Println(fmt.Sprintf("%v: New version: %v (%v)", file.Version, updatedManifest.Version, file.Path))
+		updatedManifest, err := findManifests(file.Path)
+
+		if err != nil {
+			return cli.NewExitError(err, 7)
+		}
+
+		fmt.Println(fmt.Sprintf("%v: New version: %v (%v)", file.Version, updatedManifest[0].Version, file.Path))
 	}
 	return nil
 }
