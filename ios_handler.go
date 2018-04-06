@@ -63,7 +63,7 @@ func (h iOSHandler) read(data []byte) (map[string]interface{}, error) {
 func (h iOSHandler) changePackageVersion(file packageInfo, newVersion string) error {
 	// open file with all data
 	byteValue := readFile(file.Path)
-	processedBytes, err := applyVersionToiOSPlist(byteValue, newVersion)
+	processedBytes, err := h.applyVersion(byteValue, newVersion)
 	if err != nil {
 		return fmt.Errorf("Invalid plist file: %v", file.Path)
 	}
@@ -72,33 +72,6 @@ func (h iOSHandler) changePackageVersion(file packageInfo, newVersion string) er
 }
 
 func (h iOSHandler) applyVersion(byteValue []byte, newVersion string) ([]byte, error) {
-	buffer := bytes.NewReader(byteValue)
-	decoder := plist.NewDecoder(buffer)
-	var data = map[string]interface{}{}
-	err := decoder.Decode(&data)
-
-	if err != nil {
-		return nil, errors.New("Invalid plist")
-	}
-
-	// increment version
-	data["CFBundleVersion"] = newVersion
-	data["CFBundleShortVersionString"] = newVersion
-
-	// write data inside buffer
-	var bufferedData bytes.Buffer
-	binary.Write(&bufferedData, binary.BigEndian, data)
-
-	// encode data
-	encoder := plist.NewEncoder(&bufferedData)
-	encoder.Indent("\t")
-	err = encoder.Encode(data)
-	check(err)
-
-	return bufferedData.Bytes(), nil
-}
-
-func applyVersionToiOSPlist(byteValue []byte, newVersion string) ([]byte, error) {
 	buffer := bytes.NewReader(byteValue)
 	decoder := plist.NewDecoder(buffer)
 	var data = map[string]interface{}{}
