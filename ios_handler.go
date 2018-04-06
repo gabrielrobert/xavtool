@@ -27,9 +27,10 @@ func (h iOSHandler) getPackageInfo(filePath string) (packageInfo, error) {
 	}
 
 	return packageInfo{
-		Name:    data["CFBundleDisplayName"].(string),
-		Version: data["CFBundleVersion"].(string),
-		Path:    filePath,
+		Name:            data["CFBundleDisplayName"].(string),
+		Version:         data["CFBundleShortVersionString"].(string),
+		InternalVersion: data["CFBundleVersion"].(string),
+		Path:            filePath,
 	}, nil
 }
 
