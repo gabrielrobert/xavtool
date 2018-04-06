@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_isPackage(t *testing.T) {
+func Test_iOSHandler_isPackage(t *testing.T) {
 	type args struct {
 		filename string
 	}
@@ -31,7 +31,7 @@ func Test_isPackage(t *testing.T) {
 	}
 }
 
-func Test_getPackageInfo(t *testing.T) {
+func Test_iOSHandler_getPackageInfo(t *testing.T) {
 	type args struct {
 		filename string
 	}
@@ -53,7 +53,7 @@ func Test_getPackageInfo(t *testing.T) {
 	}
 }
 
-func Test_changePackageVersion(t *testing.T) {
+func Test_iOSHandler_changePackageVersion(t *testing.T) {
 	handler := new(iOSHandler)
 	currentVersion, _ := handler.getPackageInfo("test/Info.plist")
 	handler.changePackageVersion(currentVersion, "1.0.2")
@@ -66,7 +66,7 @@ func Test_changePackageVersion(t *testing.T) {
 	handler.changePackageVersion(currentVersion, "1.0.1")
 }
 
-func Test_applyVersion(t *testing.T) {
+func Test_iOSHandler_applyVersion(t *testing.T) {
 	type args struct {
 		data    []byte
 		version string
@@ -98,7 +98,7 @@ func Test_applyVersion(t *testing.T) {
 	}
 }
 
-func Test_read(t *testing.T) {
+func Test_iOSHandler_read(t *testing.T) {
 	type args struct {
 		data []byte
 	}

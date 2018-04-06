@@ -3,11 +3,16 @@ package main
 import (
 	"bytes"
 	"encoding/xml"
+	"errors"
+	"fmt"
 	"io"
 	"strings"
 
 	"github.com/clbanning/mxj"
 )
+
+type androidHandler struct {
+}
 
 type androidBundlerHeader struct {
 	XMLName xml.Name `xml:"manifest"`
@@ -20,46 +25,49 @@ type androidBundlerHeader struct {
 	Attrs       []xml.Attr `xml:",attr"`
 }
 
-func isAndroidPackage(filename string) bool {
+func (h androidHandler) isPackage(filename string) bool {
 	return strings.ToLower(getFilename(filename)) == "androidmanifest.xml"
 }
 
-func getAndroidPackageInfo(filePath string) packageInfo {
+func (h androidHandler) getPackageInfo(filePath string) (packageInfo, error) {
 	byteValue := readFile(filePath)
-	data, err := readAndroidData(byteValue)
+	data, err := h.read(byteValue)
 
 	if err != nil {
-		return packageInfo{Path: filePath, HasError: true}
+		return packageInfo{Path: filePath, HasError: true}, err
 	}
 
 	return packageInfo{
 		Name:    data.Name,
 		Version: data.VersionName,
 		Path:    filePath,
-	}
+	}, nil
 }
 
-func readAndroidData(data []byte) (*androidBundlerHeader, error) {
+func (h androidHandler) read(data []byte) (*androidBundlerHeader, error) {
 	var header androidBundlerHeader
 	err := xml.Unmarshal(data, &header)
 	return &header, err
 }
 
-func changeAndroidPackageVersion(file packageInfo, newVersion string) error {
+func (h androidHandler) changePackageVersion(file packageInfo, newVersion string) error {
 	fileBytes := readFile(file.Path)
-	processedBytes := applyVersionToAndroidXML(fileBytes, newVersion)
+	processedBytes, err := h.applyVersion(fileBytes, newVersion)
+	if err != nil {
+		return fmt.Errorf("Invalid xml file: %v", file.Path)
+	}
 	saveFile(file.Path, processedBytes)
 	return nil
 }
 
-func applyVersionToAndroidXML(data []byte, newVersion string) []byte {
-	fileReader := bytes.NewReader(data)
+func (h androidHandler) applyVersion(byteValue []byte, newVersion string) ([]byte, error) {
+	fileReader := bytes.NewReader(byteValue)
 	for m, err := mxj.NewMapXmlSeqReader(fileReader); m != nil || err != io.EOF; m, err = mxj.NewMapXmlSeqReader(fileReader) {
 		if err != nil {
 			if err == mxj.NO_ROOT {
 				continue
 			} else {
-				check(err)
+				return nil, errors.New("Invalid xml")
 			}
 		}
 		vmap := m["manifest"].(map[string]interface{})
@@ -82,8 +90,8 @@ func applyVersionToAndroidXML(data []byte, newVersion string) []byte {
 
 		// Write header
 		header := `<?xml version="1.0" encoding="utf-8"?>` + "\n"
-		return []byte(header + string(b))
+		return []byte(header + string(b)), nil
 	}
 
-	return nil
+	return nil, nil
 }
