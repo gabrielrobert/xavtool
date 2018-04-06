@@ -3,11 +3,15 @@ package main
 import (
 	"bytes"
 	"encoding/xml"
+	"fmt"
 	"io"
 	"strings"
 
 	"github.com/clbanning/mxj"
 )
+
+type uwpHandler struct {
+}
 
 type uwpIdentity struct {
 	Version string `xml:"Version,attr"`
@@ -24,40 +28,43 @@ type uwpBundlerHeader struct {
 	Attrs      []xml.Attr    `xml:",attr"`
 }
 
-func isUWPPackage(filename string) bool {
+func (h uwpHandler) isPackage(filename string) bool {
 	return strings.ToLower(getFilename(filename)) == "package.appxmanifest"
 }
 
-func getUWPPackageInfo(filePath string) packageInfo {
+func (h uwpHandler) getPackageInfo(filePath string) (packageInfo, error) {
 	byteValue := readFile(filePath)
-	data, err := readUWPData(byteValue)
+	data, err := h.read(byteValue)
 
 	if err != nil {
-		return packageInfo{Path: filePath, HasError: true}
+		return packageInfo{Path: filePath, HasError: true}, err
 	}
 
 	return packageInfo{
 		Name:    data.Properties.Name,
 		Version: data.Identity.Version,
 		Path:    filePath,
-	}
+	}, nil
 }
 
-func readUWPData(data []byte) (*uwpBundlerHeader, error) {
+func (h uwpHandler) read(data []byte) (*uwpBundlerHeader, error) {
 	var header uwpBundlerHeader
 	err := xml.Unmarshal(data, &header)
 	return &header, err
 }
 
-func changeUWPPackageVersion(file packageInfo, newVersion string) error {
+func (h uwpHandler) changePackageVersion(file packageInfo, newVersion string) error {
 	fileBytes := readFile(file.Path)
-	processedBytes := applyVersionToUWPXML(fileBytes, newVersion)
+	processedBytes, err := h.applyVersion(fileBytes, newVersion)
+	if err != nil {
+		return fmt.Errorf("Invalid xml file: %v", file.Path)
+	}
 	saveFile(file.Path, processedBytes)
 	return nil
 }
 
-func applyVersionToUWPXML(data []byte, newVersion string) []byte {
-	fileReader := bytes.NewReader(data)
+func (h uwpHandler) applyVersion(byteValue []byte, newVersion string) ([]byte, error) {
+	fileReader := bytes.NewReader(byteValue)
 	for m, err := mxj.NewMapXmlSeqReader(fileReader); m != nil || err != io.EOF; m, err = mxj.NewMapXmlSeqReader(fileReader) {
 		if err != nil {
 			if err == mxj.NO_ROOT {
@@ -81,8 +88,8 @@ func applyVersionToUWPXML(data []byte, newVersion string) []byte {
 
 		// Write header
 		header := `<?xml version="1.0" encoding="utf-8"?>` + "\n"
-		return []byte(header + string(b))
+		return []byte(header + string(b)), nil
 	}
 
-	return nil
+	return nil, nil
 }

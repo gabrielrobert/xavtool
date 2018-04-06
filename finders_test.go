@@ -10,7 +10,7 @@ func Test_FindManifests(t *testing.T) {
 	dir, err := os.Getwd()
 	check(err)
 
-	foundFiles, err := findManifests(dir)
+	foundFiles, err := findManifests(dir, []packageHandler{iOSHandler{}, androidHandler{}, uwpHandler{}})
 	if foundFiles == nil || len(foundFiles) == 0 {
 		t.Errorf("at least one file should be found")
 	}

@@ -6,9 +6,11 @@ import (
 	"github.com/urfave/cli"
 )
 
+var handlers = []packageHandler{iOSHandler{}, androidHandler{}, uwpHandler{}}
+
 // called by executing `xavtool current`
 func current(c *cli.Context) error {
-	allFiles, err := findManifests(getWorkingDir())
+	allFiles, err := findManifests(getWorkingDir(), handlers)
 
 	// validations
 	if err != nil {
@@ -35,7 +37,7 @@ func current(c *cli.Context) error {
 
 // called by executing `xavtool increment`
 func increment(c *cli.Context) error {
-	allFiles, err := findManifests(getWorkingDir())
+	allFiles, err := findManifests(getWorkingDir(), handlers)
 
 	// validations
 	if err != nil {
@@ -68,7 +70,7 @@ func increment(c *cli.Context) error {
 		}
 
 		setVersion(file, newVersion)
-		updatedManifest, err := findManifests(file.Path)
+		updatedManifest, err := findManifests(file.Path, handlers)
 
 		if err != nil {
 			return cli.NewExitError(err, 5)
@@ -93,7 +95,7 @@ func set(c *cli.Context) error {
 		return cli.NewExitError(fmt.Sprintf("Version '%v' is not valid", newVersion), 3)
 	}
 
-	allFiles, err := findManifests(getWorkingDir())
+	allFiles, err := findManifests(getWorkingDir(), handlers)
 
 	// validations
 	if err != nil {
@@ -113,7 +115,7 @@ func set(c *cli.Context) error {
 	// execute version update
 	for _, file := range allFiles {
 		setVersion(file, newVersion)
-		updatedManifest, err := findManifests(file.Path)
+		updatedManifest, err := findManifests(file.Path, handlers)
 
 		if err != nil {
 			return cli.NewExitError(err, 7)
@@ -125,11 +127,9 @@ func set(c *cli.Context) error {
 }
 
 func setVersion(file packageInfo, version string) {
-	if isiOsPackage(file.Path) {
-		changeiOSPackageVersion(file, version)
-	} else if isAndroidPackage(file.Path) {
-		changeAndroidPackageVersion(file, version)
-	} else if isUWPPackage(file.Path) {
-		changeUWPPackageVersion(file, version)
+	for _, handler := range handlers {
+		if handler.isPackage(file.Path) {
+			handler.changePackageVersion(file, version)
+		}
 	}
 }
