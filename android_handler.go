@@ -38,9 +38,10 @@ func (h androidHandler) getPackageInfo(filePath string) (packageInfo, error) {
 	}
 
 	return packageInfo{
-		Name:    data.Name,
-		Version: data.VersionName,
-		Path:    filePath,
+		Name:            data.Name,
+		Version:         data.VersionName,
+		InternalVersion: data.Code,
+		Path:            filePath,
 	}, nil
 }
 

@@ -29,7 +29,7 @@ func current(c *cli.Context) error {
 
 	// show packages
 	for _, file := range allFiles {
-		fmt.Println(fmt.Sprintf("%v - %v (%v)", file.Version, file.Name, file.Path))
+		fmt.Println(fmt.Sprintf("%v [%v] - %v (%v)", file.Version, file.InternalVersion, file.Name, file.Path))
 	}
 
 	return nil
