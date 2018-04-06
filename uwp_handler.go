@@ -41,9 +41,10 @@ func (h uwpHandler) getPackageInfo(filePath string) (packageInfo, error) {
 	}
 
 	return packageInfo{
-		Name:    data.Properties.Name,
-		Version: data.Identity.Version,
-		Path:    filePath,
+		Name:            data.Properties.Name,
+		Version:         data.Identity.Version,
+		InternalVersion: "---",
+		Path:            filePath,
 	}, nil
 }
 

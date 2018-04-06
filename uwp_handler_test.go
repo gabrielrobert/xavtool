@@ -37,12 +37,9 @@ func Test_uwpHandler_getPackageInfo(t *testing.T) {
 	handler := new(uwpHandler)
 	currentVersion, err := handler.getPackageInfo(uwpFilePath)
 	require.NoError(t, err)
-	if currentVersion.Version != "1.0.1.0" {
-		t.Errorf("version mismatch; actual %v, expected %v", currentVersion.Version, "1.0.1.0")
-	}
-	if currentVersion.Name != "xavtool" {
-		t.Errorf("name mismatch; actual %v, expected %v", currentVersion.Name, "xavtool")
-	}
+	assert.Equal(t, "1.0.1.0", currentVersion.Version)
+	assert.Equal(t, "xavtool", currentVersion.Name)
+	assert.Equal(t, "---", currentVersion.InternalVersion)
 }
 
 func Test_uwpHandler_changePackageVersion(t *testing.T) {
