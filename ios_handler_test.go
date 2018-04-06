@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_isiOsPackage(t *testing.T) {
+func Test_iOSHandler_isPackage(t *testing.T) {
 	type args struct {
 		filename string
 	}
@@ -23,14 +23,15 @@ func Test_isiOsPackage(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := isiOsPackage(tt.args.filename); got != tt.want {
+			handler := new(iOSHandler)
+			if got := handler.isPackage(tt.args.filename); got != tt.want {
 				t.Errorf("isiOsPackage() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_getiOSPackageInfo(t *testing.T) {
+func Test_iOSHandler_getPackageInfo(t *testing.T) {
 	type args struct {
 		filename string
 	}
@@ -43,26 +44,29 @@ func Test_getiOSPackageInfo(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := getiOSPackageInfo(tt.args.filename); got.Version != tt.want.Version {
-				t.Errorf("getiOSPackageInfo.Version() = %v, want %v", got.Version, tt.want.Version)
+			handler := new(iOSHandler)
+			got, _ := handler.getPackageInfo(tt.args.filename)
+			if got.Version != tt.want.Version {
+				t.Errorf("getPackageInfo.Version() = %v, want %v", got.Version, tt.want.Version)
 			}
 		})
 	}
 }
 
-func Test_changeiOSPackageVersion(t *testing.T) {
-	currentVersion := getiOSPackageInfo("test/Info.plist")
-	changeiOSPackageVersion(currentVersion, "1.0.2")
-	currentVersion = getiOSPackageInfo("test/Info.plist")
+func Test_iOSHandler_changePackageVersion(t *testing.T) {
+	handler := new(iOSHandler)
+	currentVersion, _ := handler.getPackageInfo("test/Info.plist")
+	handler.changePackageVersion(currentVersion, "1.0.2")
+	currentVersion, _ = handler.getPackageInfo("test/Info.plist")
 	if currentVersion.Version != "1.0.2" {
 		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.2")
 	}
 
 	// some kind of rollback
-	changeiOSPackageVersion(currentVersion, "1.0.1")
+	handler.changePackageVersion(currentVersion, "1.0.1")
 }
 
-func Test_applyVersionToiOSPlist(t *testing.T) {
+func Test_iOSHandler_applyVersion(t *testing.T) {
 	type args struct {
 		data    []byte
 		version string
@@ -79,13 +83,14 @@ func Test_applyVersionToiOSPlist(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := applyVersionToiOSPlist(tt.args.data, tt.args.version)
+			handler := new(iOSHandler)
+			got, err := handler.applyVersion(tt.args.data, tt.args.version)
 			if tt.shouldError {
 				require.Error(t, err)
 				return
 			}
 
-			data, _ := readiOSData(got)
+			data, _ := handler.read(got)
 
 			require.NoError(t, err)
 			assert.Equal(t, tt.want, data["CFBundleVersion"])
@@ -93,7 +98,7 @@ func Test_applyVersionToiOSPlist(t *testing.T) {
 	}
 }
 
-func Test_readiOSData(t *testing.T) {
+func Test_iOSHandler_read(t *testing.T) {
 	type args struct {
 		data []byte
 	}
@@ -104,18 +109,21 @@ func Test_readiOSData(t *testing.T) {
 		shouldError bool
 	}{
 		{"invalid bytes", args{invalidPlist}, "", true},
+		{"missing properties", args{missingPropertiesPlist}, "", true},
 		{"valid file", args{readFile("test/Info.plist")}, "1.0.1", false},
 		{"valid bytes", args{iOSSeed}, "1.0.1", false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := readiOSData(tt.args.data)
+			handler := new(iOSHandler)
+			got, err := handler.read(tt.args.data)
 			if tt.shouldError {
 				require.Error(t, err)
 				return
 			}
 			require.NoError(t, err)
 			assert.Equal(t, tt.want, got["CFBundleVersion"])
+			assert.Equal(t, tt.want, got["CFBundleShortVersionString"])
 		})
 	}
 }
@@ -125,18 +133,12 @@ var iOSSeed = []byte(`
 	<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 	<plist version="1.0">
 		<dict>
-			<key>CFBundleInfoDictionaryVersion</key>
-			<string>6.0</string>
+			<key>CFBundleDisplayName</key>
+			<string>test</string>
 			<key>CFBundleVersion</key>
 			<string>1.0.1</string>
-			<key>band-size</key>
-			<integer>8388608</integer>
-			<key>bundle-backingstore-version</key>
-			<integer>1</integer>
-			<key>diskimage-bundle-type</key>
-			<string>com.apple.diskimage.sparsebundle</string>
-			<key>size</key>
-			<integer>4398046511104</integer>
+			<key>CFBundleShortVersionString</key>
+			<string>1.0.1</string>
 		</dict>
 	</plist>
 `)
@@ -144,4 +146,13 @@ var iOSSeed = []byte(`
 var invalidPlist = []byte(`
 	<?xml version="1.0" encoding="UTF-8"?>
 	<plist ve/
+`)
+
+var missingPropertiesPlist = []byte(`
+	<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+	<plist version="1.0">
+		<dict>
+		</dict>
+	</plist>
 `)

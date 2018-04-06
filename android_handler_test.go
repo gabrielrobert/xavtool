@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_isAndroidPackage(t *testing.T) {
+func Test_androidHandler_isPackage(t *testing.T) {
 	type args struct {
 		filename string
 	}
@@ -23,39 +23,47 @@ func Test_isAndroidPackage(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := isAndroidPackage(tt.args.filename); got != tt.want {
+			handler := new(androidHandler)
+			if got := handler.isPackage(tt.args.filename); got != tt.want {
 				t.Errorf("isAndroidPackage() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_getAndroidPackageInfo(t *testing.T) {
-	currentVersion := getAndroidPackageInfo(filePath)
+func Test_androidHandler_getPackageInfo(t *testing.T) {
+	handler := new(androidHandler)
+	currentVersion, err := handler.getPackageInfo(filePath)
+	require.NoError(t, err)
 	if currentVersion.Version != "1.0.1" {
 		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.1")
 	}
 }
 
-func Test_changeAndroidPackageVersion(t *testing.T) {
-	currentVersion := getAndroidPackageInfo(filePath)
+func Test_androidHandler_changePackageVersion(t *testing.T) {
+	handler := new(androidHandler)
+	currentVersion, err := handler.getPackageInfo(filePath)
+	require.NoError(t, err)
 	if currentVersion.Version != "1.0.1" {
 		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.1")
 	}
 
-	changeAndroidPackageVersion(currentVersion, "1.0.2")
-	currentVersion = getAndroidPackageInfo(filePath)
+	handler.changePackageVersion(currentVersion, "1.0.2")
+	currentVersion, err = handler.getPackageInfo(filePath)
+	require.NoError(t, err)
 	if currentVersion.Version != "1.0.2" {
 		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.2")
 	}
 
 	// some kind of rollback
-	changeAndroidPackageVersion(currentVersion, "1.0.1")
+	handler.changePackageVersion(currentVersion, "1.0.1")
 }
 
-func Test_applyVersionToAndroidXML(t *testing.T) {
-	processedBytes := applyVersionToAndroidXML(androidSeed, "1.0.2")
-	xml, _ := readAndroidData(processedBytes)
+func Test_androidHandler_applyVersion(t *testing.T) {
+	handler := new(androidHandler)
+	processedBytes, err := handler.applyVersion(androidSeed, "1.0.2")
+	require.NoError(t, err)
+	xml, _ := handler.read(processedBytes)
 	if xml.VersionName != "1.0.2" {
 		t.Errorf("VersionName mismatch; expected %v", "1.0.2")
 	}
@@ -64,7 +72,7 @@ func Test_applyVersionToAndroidXML(t *testing.T) {
 	}
 }
 
-func Test_readAndroidData(t *testing.T) {
+func Test_androidHandler_read(t *testing.T) {
 	type args struct {
 		data []byte
 	}
@@ -80,7 +88,8 @@ func Test_readAndroidData(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := readAndroidData(tt.args.data)
+			handler := new(androidHandler)
+			got, err := handler.read(tt.args.data)
 			if tt.shouldError {
 				require.Error(t, err)
 				return

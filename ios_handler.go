@@ -8,39 +8,62 @@ import (
 	"strings"
 
 	"github.com/DHowett/go-plist"
+	multierror "github.com/hashicorp/go-multierror"
 )
 
-func isiOsPackage(filename string) bool {
+type iOSHandler struct {
+}
+
+func (h iOSHandler) isPackage(filename string) bool {
 	return strings.ToLower(getFilename(filename)) == "info.plist"
 }
 
-func getiOSPackageInfo(filePath string) packageInfo {
+func (h iOSHandler) getPackageInfo(filePath string) (packageInfo, error) {
 	byteValue := readFile(filePath)
-	data, err := readiOSData(byteValue)
+	data, err := h.read(byteValue)
 
 	if err != nil {
-		return packageInfo{Path: filePath, HasError: true}
+		return packageInfo{Path: filePath, HasError: true}, err
 	}
 
 	return packageInfo{
 		Name:    data["CFBundleDisplayName"].(string),
 		Version: data["CFBundleVersion"].(string),
 		Path:    filePath,
-	}
+	}, nil
 }
 
-func readiOSData(data []byte) (map[string]interface{}, error) {
+func (h iOSHandler) read(data []byte) (map[string]interface{}, error) {
+	var result error
+
 	buffer := bytes.NewReader(data)
 	decoder := plist.NewDecoder(buffer)
 	var decodeInterface = map[string]interface{}{}
 	err := decoder.Decode(&decodeInterface)
-	return decodeInterface, err
+
+	if err != nil {
+		return decodeInterface, err
+	}
+
+	if _, exists := decodeInterface["CFBundleDisplayName"]; !exists {
+		result = multierror.Append(result, fmt.Errorf("Missing property %v", "CFBundleDisplayName"))
+	}
+
+	if _, exists := decodeInterface["CFBundleVersion"]; !exists {
+		result = multierror.Append(result, fmt.Errorf("Missing property %v", "CFBundleVersion"))
+	}
+
+	if _, exists := decodeInterface["CFBundleShortVersionString"]; !exists {
+		result = multierror.Append(result, fmt.Errorf("Missing property %v", "CFBundleShortVersionString"))
+	}
+
+	return decodeInterface, result
 }
 
-func changeiOSPackageVersion(file packageInfo, newVersion string) error {
+func (h iOSHandler) changePackageVersion(file packageInfo, newVersion string) error {
 	// open file with all data
 	byteValue := readFile(file.Path)
-	processedBytes, err := applyVersionToiOSPlist(byteValue, newVersion)
+	processedBytes, err := h.applyVersion(byteValue, newVersion)
 	if err != nil {
 		return fmt.Errorf("Invalid plist file: %v", file.Path)
 	}
@@ -48,7 +71,7 @@ func changeiOSPackageVersion(file packageInfo, newVersion string) error {
 	return nil
 }
 
-func applyVersionToiOSPlist(byteValue []byte, newVersion string) ([]byte, error) {
+func (h iOSHandler) applyVersion(byteValue []byte, newVersion string) ([]byte, error) {
 	buffer := bytes.NewReader(byteValue)
 	decoder := plist.NewDecoder(buffer)
 	var data = map[string]interface{}{}

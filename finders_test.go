@@ -5,12 +5,12 @@ import (
 	"testing"
 )
 
-func TestFindManifests(t *testing.T) {
+func Test_FindManifests(t *testing.T) {
 	// scan current folder
 	dir, err := os.Getwd()
 	check(err)
 
-	foundFiles := findManifests(dir)
+	foundFiles, err := findManifests(dir, []packageHandler{iOSHandler{}, androidHandler{}, uwpHandler{}})
 	if foundFiles == nil || len(foundFiles) == 0 {
 		t.Errorf("at least one file should be found")
 	}

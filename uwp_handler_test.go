@@ -9,7 +9,7 @@ import (
 
 var uwpFilePath = "test/Package.appxmanifest"
 
-func Test_isUWPPackage(t *testing.T) {
+func Test_uwpHandler_isPackage(t *testing.T) {
 	type args struct {
 		filename string
 	}
@@ -25,15 +25,18 @@ func Test_isUWPPackage(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := isUWPPackage(tt.args.filename); got != tt.want {
-				t.Errorf("isUWPPackage() = %v, want %v", got, tt.want)
+			handler := new(uwpHandler)
+			if got := handler.isPackage(tt.args.filename); got != tt.want {
+				t.Errorf("isPackage() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_getUWPPackageInfo(t *testing.T) {
-	currentVersion := getUWPPackageInfo(uwpFilePath)
+func Test_uwpHandler_getPackageInfo(t *testing.T) {
+	handler := new(uwpHandler)
+	currentVersion, err := handler.getPackageInfo(uwpFilePath)
+	require.NoError(t, err)
 	if currentVersion.Version != "1.0.1.0" {
 		t.Errorf("version mismatch; actual %v, expected %v", currentVersion.Version, "1.0.1.0")
 	}
@@ -42,31 +45,36 @@ func Test_getUWPPackageInfo(t *testing.T) {
 	}
 }
 
-func Test_changeUWPPackageVersion(t *testing.T) {
-	currentVersion := getUWPPackageInfo(uwpFilePath)
+func Test_uwpHandler_changePackageVersion(t *testing.T) {
+	handler := new(uwpHandler)
+	currentVersion, err := handler.getPackageInfo(uwpFilePath)
+	require.NoError(t, err)
 	if currentVersion.Version != "1.0.1.0" {
 		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.1.0")
 	}
 
-	changeUWPPackageVersion(currentVersion, "1.0.2")
-	currentVersion = getUWPPackageInfo(uwpFilePath)
+	handler.changePackageVersion(currentVersion, "1.0.2")
+	currentVersion, err = handler.getPackageInfo(uwpFilePath)
+	require.NoError(t, err)
 	if currentVersion.Version != "1.0.2.0" {
 		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.2.0")
 	}
 
 	// some kind of rollback
-	changeUWPPackageVersion(currentVersion, "1.0.1")
+	handler.changePackageVersion(currentVersion, "1.0.1")
 }
 
-func Test_applyVersionToUWPXML(t *testing.T) {
-	processedBytes := applyVersionToUWPXML(uwpSeed, "1.0.2")
-	xml, _ := readUWPData(processedBytes)
+func Test_uwpHandler_applyVersion(t *testing.T) {
+	handler := new(uwpHandler)
+	processedBytes, err := handler.applyVersion(uwpSeed, "1.0.2")
+	require.NoError(t, err)
+	xml, _ := handler.read(processedBytes)
 	if xml.Identity.Version != "1.0.2.0" {
 		t.Errorf("VersionName mismatch; expected %v, got %v", "1.0.2.0", xml.Identity.Version)
 	}
 }
 
-func Test_readUWPData(t *testing.T) {
+func Test_uwpHandler_read(t *testing.T) {
 	type args struct {
 		data []byte
 	}
@@ -82,7 +90,8 @@ func Test_readUWPData(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := readUWPData(tt.args.data)
+			handler := new(uwpHandler)
+			got, err := handler.read(tt.args.data)
 			if tt.shouldError {
 				require.Error(t, err)
 				return
