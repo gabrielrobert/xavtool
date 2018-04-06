@@ -14,7 +14,7 @@ type packageInfo struct {
 	HasError bool
 }
 
-func findManifests(root string) ([]packageInfo, error) {
+func findManifests(root string, handlers []packageHandler) ([]packageInfo, error) {
 	var result error
 	fileList := []packageInfo{}
 
@@ -24,13 +24,17 @@ func findManifests(root string) ([]packageInfo, error) {
 			return filepath.SkipDir
 		}
 
-		if isiOsPackage(f.Name()) {
-			pkg, err := getiOSPackageInfo(path)
-			fileList = append(fileList, pkg)
-			if err != nil {
-				result = multierror.Append(result, err)
+		for _, handler := range handlers {
+			if handler.isPackage(path) {
+				pkg, err := handler.getPackageInfo(path)
+				fileList = append(fileList, pkg)
+				if err != nil {
+					result = multierror.Append(result, err)
+				}
 			}
-		} else if isAndroidPackage(f.Name()) {
+		}
+
+		if isAndroidPackage(f.Name()) {
 			fileList = append(fileList, getAndroidPackageInfo(path))
 		} else if isUWPPackage(f.Name()) {
 			fileList = append(fileList, getUWPPackageInfo(path))

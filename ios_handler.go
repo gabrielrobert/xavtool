@@ -11,13 +11,16 @@ import (
 	multierror "github.com/hashicorp/go-multierror"
 )
 
-func isiOsPackage(filename string) bool {
+type iOSHandler struct {
+}
+
+func (h iOSHandler) isPackage(filename string) bool {
 	return strings.ToLower(getFilename(filename)) == "info.plist"
 }
 
-func getiOSPackageInfo(filePath string) (packageInfo, error) {
+func (h iOSHandler) getPackageInfo(filePath string) (packageInfo, error) {
 	byteValue := readFile(filePath)
-	data, err := readiOSData(byteValue)
+	data, err := h.read(byteValue)
 
 	if err != nil {
 		return packageInfo{Path: filePath, HasError: true}, err
@@ -30,7 +33,7 @@ func getiOSPackageInfo(filePath string) (packageInfo, error) {
 	}, nil
 }
 
-func readiOSData(data []byte) (map[string]interface{}, error) {
+func (h iOSHandler) read(data []byte) (map[string]interface{}, error) {
 	var result error
 
 	buffer := bytes.NewReader(data)
@@ -57,7 +60,7 @@ func readiOSData(data []byte) (map[string]interface{}, error) {
 	return decodeInterface, result
 }
 
-func changeiOSPackageVersion(file packageInfo, newVersion string) error {
+func (h iOSHandler) changePackageVersion(file packageInfo, newVersion string) error {
 	// open file with all data
 	byteValue := readFile(file.Path)
 	processedBytes, err := applyVersionToiOSPlist(byteValue, newVersion)
@@ -66,6 +69,33 @@ func changeiOSPackageVersion(file packageInfo, newVersion string) error {
 	}
 	saveFile(file.Path, processedBytes)
 	return nil
+}
+
+func (h iOSHandler) applyVersion(byteValue []byte, newVersion string) ([]byte, error) {
+	buffer := bytes.NewReader(byteValue)
+	decoder := plist.NewDecoder(buffer)
+	var data = map[string]interface{}{}
+	err := decoder.Decode(&data)
+
+	if err != nil {
+		return nil, errors.New("Invalid plist")
+	}
+
+	// increment version
+	data["CFBundleVersion"] = newVersion
+	data["CFBundleShortVersionString"] = newVersion
+
+	// write data inside buffer
+	var bufferedData bytes.Buffer
+	binary.Write(&bufferedData, binary.BigEndian, data)
+
+	// encode data
+	encoder := plist.NewEncoder(&bufferedData)
+	encoder.Indent("\t")
+	err = encoder.Encode(data)
+	check(err)
+
+	return bufferedData.Bytes(), nil
 }
 
 func applyVersionToiOSPlist(byteValue []byte, newVersion string) ([]byte, error) {
