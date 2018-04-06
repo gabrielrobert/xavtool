@@ -35,9 +35,8 @@ func Test_androidHandler_getPackageInfo(t *testing.T) {
 	handler := new(androidHandler)
 	currentVersion, err := handler.getPackageInfo(filePath)
 	require.NoError(t, err)
-	if currentVersion.Version != "1.0.1" {
-		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.1")
-	}
+	assert.Equal(t, "1.0.1", currentVersion.Version)
+	assert.Equal(t, "1000100", currentVersion.InternalVersion)
 }
 
 func Test_androidHandler_changePackageVersion(t *testing.T) {
