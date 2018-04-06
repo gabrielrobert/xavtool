@@ -8,10 +8,11 @@ import (
 )
 
 type packageInfo struct {
-	Name     string
-	Version  string
-	Path     string
-	HasError bool
+	Name            string
+	Version         string
+	InternalVersion string
+	Path            string
+	HasError        bool
 }
 
 func findManifests(root string, handlers []packageHandler) ([]packageInfo, error) {
