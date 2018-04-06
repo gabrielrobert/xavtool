@@ -34,10 +34,6 @@ func findManifests(root string, handlers []packageHandler) ([]packageInfo, error
 			}
 		}
 
-		if isUWPPackage(f.Name()) {
-			fileList = append(fileList, getUWPPackageInfo(path))
-		}
-
 		return nil
 	})
 

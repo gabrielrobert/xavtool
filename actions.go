@@ -6,7 +6,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var handlers = []packageHandler{iOSHandler{}, androidHandler{}}
+var handlers = []packageHandler{iOSHandler{}, androidHandler{}, uwpHandler{}}
 
 // called by executing `xavtool current`
 func current(c *cli.Context) error {
@@ -131,9 +131,5 @@ func setVersion(file packageInfo, version string) {
 		if handler.isPackage(file.Path) {
 			handler.changePackageVersion(file, version)
 		}
-	}
-
-	if isUWPPackage(file.Path) {
-		changeUWPPackageVersion(file, version)
 	}
 }
