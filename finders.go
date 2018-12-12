@@ -46,7 +46,8 @@ func findManifests(root string, handlers []packageHandler) ([]packageInfo, error
 }
 
 func isIgnored(f os.FileInfo) bool {
-	if f.IsDir() && stringInSlice(f.Name(), []string{"bin", "obj", ".git"}) {
+	var ignoredFolders = []string{"bin", "obj", ".git", "CordovaLib"}
+	if f.IsDir() && stringInSlice(f.Name(), ignoredFolders) {
 		return true
 	}
 	return false

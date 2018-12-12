@@ -29,3 +29,14 @@ func Test_FindManifests(t *testing.T) {
 		}
 	}
 }
+func Test_FindManifests_ShouldIgnoreCordovaLibFolder(t *testing.T) {
+
+	// scan current folder
+	dir, err := os.Getwd()
+	check(err)
+	foundFiles, err := findManifests(dir+"\\test\\CordovaLib", []packageHandler{iOSHandler{}, androidHandler{}, uwpHandler{}})
+
+	if len(foundFiles) == 1 {
+		t.Errorf("should not be picked")
+	}
+}
