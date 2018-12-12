@@ -86,7 +86,7 @@ USAGE:
    xavtool increment [command options] [arguments...]
 
 OPTIONS:
-   --type value, -t value  major, minor, path (default: "minor")
+   --type value, -t value  major, minor, patch (default: "minor")
 ```
 
 ### set
