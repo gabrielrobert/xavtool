@@ -10,7 +10,7 @@ var handlers = []packageHandler{iOSHandler{}, androidHandler{}, uwpHandler{}}
 
 // called by executing `xavtool current`
 func current(c *cli.Context) error {
-	allFiles, err := findManifests(getWorkingDir(), handlers)
+	allFiles, err := findManifests(getGivenPathOrWorkingDir(c), handlers)
 
 	// validations
 	if err != nil {
@@ -37,7 +37,7 @@ func current(c *cli.Context) error {
 
 // called by executing `xavtool increment`
 func increment(c *cli.Context) error {
-	allFiles, err := findManifests(getWorkingDir(), handlers)
+	allFiles, err := findManifests(getGivenPathOrWorkingDir(c), handlers)
 
 	// validations
 	if err != nil {
@@ -95,7 +95,7 @@ func set(c *cli.Context) error {
 		return cli.NewExitError(fmt.Sprintf("Version '%v' is not valid", newVersion), 3)
 	}
 
-	allFiles, err := findManifests(getWorkingDir(), handlers)
+	allFiles, err := findManifests(getGivenPathOrWorkingDir(c), handlers)
 
 	// validations
 	if err != nil {
