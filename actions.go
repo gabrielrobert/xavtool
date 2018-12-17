@@ -6,7 +6,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var handlers = []packageHandler{iOSHandler{}, androidHandler{}, uwpHandler{}}
+var handlers = []packageHandler{iOSHandler{}, androidHandler{}, uwpHandler{}, cordovaHandler{}}
 
 // called by executing `xavtool current`
 func current(c *cli.Context) error {
