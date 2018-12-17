@@ -12,6 +12,7 @@ func Test_FindManifests(t *testing.T) {
 		{"Info.plist"},
 		{"AndroidManifest.xml"},
 		{"Package.appxmanifest"},
+		{"config.xml"},
 	}
 
 	// scan current folder
@@ -27,16 +28,5 @@ func Test_FindManifests(t *testing.T) {
 		if !containsStructFieldValue(foundFiles, "Path", table.file) {
 			t.Errorf("test file info.plist has not been found, expected %v", "test/Info.plist")
 		}
-	}
-}
-func Test_FindManifests_ShouldIgnoreCordovaLibFolder(t *testing.T) {
-
-	// scan current folder
-	dir, err := os.Getwd()
-	check(err)
-	foundFiles, err := findManifests(dir+"\\test\\CordovaLib", []packageHandler{iOSHandler{}, androidHandler{}, uwpHandler{}, cordovaHandler{}})
-
-	if len(foundFiles) == 1 {
-		t.Errorf("should not be picked")
 	}
 }
