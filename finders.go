@@ -8,10 +8,11 @@ import (
 )
 
 type packageInfo struct {
-	Name     string
-	Version  string
-	Path     string
-	HasError bool
+	Name            string
+	Version         string
+	InternalVersion string
+	Path            string
+	HasError        bool
 }
 
 func findManifests(root string, handlers []packageHandler) ([]packageInfo, error) {
@@ -45,7 +46,8 @@ func findManifests(root string, handlers []packageHandler) ([]packageInfo, error
 }
 
 func isIgnored(f os.FileInfo) bool {
-	if f.IsDir() && stringInSlice(f.Name(), []string{"bin", "obj", ".git"}) {
+	var ignoredFolders = []string{"bin", "obj", ".git", "CordovaLib", "platforms", "res", "node_modules"}
+	if f.IsDir() && stringInSlice(f.Name(), ignoredFolders) {
 		return true
 	}
 	return false
