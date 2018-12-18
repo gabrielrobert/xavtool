@@ -1,4 +1,4 @@
-![Header](_assets/xavtool_header.png "Header")
+![Header](https://i.imgur.com/ndlN2v3.png "Header")
 
 # Xplat Automating Version Tool
 
