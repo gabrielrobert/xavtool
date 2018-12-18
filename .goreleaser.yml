@@ -1,6 +1,8 @@
 builds:
 - env:
   - CGO_ENABLED=0
+- goos:
+    - windows
 archive:
   name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
   replacements:
