@@ -13,16 +13,21 @@ install:
   - go version
   - go env
   - go get github.com/gabrielrobert/xavtool
-  - go get github.com/goreleaser/goreleaser
+  - ps: iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
+  - ps: scoop bucket add goreleaser https://github.com/goreleaser/scoop-bucket.git
+  - ps: scoop install goreleaser
+  - goreleaser -v
   - go get -t -v ./...
 
 build_script:
   - go build
-  - goreleaser --rm-dist --snapshot
-  - choco pack
 
 test_script:
   - go test -v
+
+after_test:
+  - goreleaser --rm-dist --snapshot
+  - choco pack
 
 artifacts:
   - path: '**\*.nupkg'

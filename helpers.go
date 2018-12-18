@@ -3,6 +3,8 @@ package main
 import (
 	"reflect"
 	"strings"
+
+	"github.com/urfave/cli"
 )
 
 func stringInSlice(a string, list []string) bool {
@@ -46,4 +48,12 @@ func check(e error) {
 	if e != nil {
 		panic(e)
 	}
+}
+
+func getGivenPathOrWorkingDir(c *cli.Context) string {
+	var path = getWorkingDir()
+	if c.Args().Get(0) != "" {
+		path = c.Args().Get(0)
+	}
+	return path
 }

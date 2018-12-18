@@ -40,15 +40,14 @@ func Test_iOSHandler_getPackageInfo(t *testing.T) {
 		args args
 		want packageInfo
 	}{
-		{"normal file", args{"test/Info.plist"}, packageInfo{Version: "1.0.1"}},
+		{"normal file", args{"test/Info.plist"}, packageInfo{Version: "1.0.1", InternalVersion: "1.0.1"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			handler := new(iOSHandler)
 			got, _ := handler.getPackageInfo(tt.args.filename)
-			if got.Version != tt.want.Version {
-				t.Errorf("getPackageInfo.Version() = %v, want %v", got.Version, tt.want.Version)
-			}
+			assert.Equal(t, got.Version, tt.want.Version)
+			assert.Equal(t, got.InternalVersion, tt.want.InternalVersion)
 		})
 	}
 }
@@ -58,9 +57,8 @@ func Test_iOSHandler_changePackageVersion(t *testing.T) {
 	currentVersion, _ := handler.getPackageInfo("test/Info.plist")
 	handler.changePackageVersion(currentVersion, "1.0.2")
 	currentVersion, _ = handler.getPackageInfo("test/Info.plist")
-	if currentVersion.Version != "1.0.2" {
-		t.Errorf("version mismatch; actual %v, expected %v", currentVersion, "1.0.2")
-	}
+	assert.Equal(t, "1.0.2", currentVersion.Version)
+	assert.Equal(t, "1.0.2", currentVersion.InternalVersion)
 
 	// some kind of rollback
 	handler.changePackageVersion(currentVersion, "1.0.1")

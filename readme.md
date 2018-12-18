@@ -1,6 +1,6 @@
 ![Header](_assets/xavtool_header.png "Header")
 
-# Xamarin Automating Version Tool
+# Xplat Automating Version Tool
 
 [![Build status](https://ci.appveyor.com/api/projects/status/6lfimg1j4pw9f807?svg=true)](https://ci.appveyor.com/project/grobert092/xavtool)
 [![Build Status](https://travis-ci.org/gabrielrobert/xavtool.svg?branch=master)](https://travis-ci.org/gabrielrobert/xavtool)
@@ -14,7 +14,7 @@ Command-line utility to automatically increase iOS / Android / UWP applications 
 Using [Chocolatey](https://chocolatey.org/):
 
 ```bash
-$ choco install xavtool -version 1.1.2
+$ choco install xavtool -version 1.2.0
 $ xavtool --version
 ```
 
@@ -59,7 +59,7 @@ USAGE:
    xavtool [global options] command [command options] [arguments...]
 
 VERSION:
-   1.1.2
+   1.2.0
 
 AUTHOR:
    Gabriel Robert <g.robert092@gmail.com>
@@ -86,7 +86,7 @@ USAGE:
    xavtool increment [command options] [arguments...]
 
 OPTIONS:
-   --type value, -t value  major, minor, path (default: "minor")
+   --type value, -t value  major, minor, patch (default: "minor")
 ```
 
 ### set
@@ -127,7 +127,7 @@ It will update these files:
 
 ## Results
 
-### Info.plist
+### Info.plist (iOS)
 
 Only these values will be edited:
 
@@ -166,7 +166,7 @@ After:
 </plist>
 ```
 
-### AndroidManifest.xml
+### AndroidManifest.xml (Android)
 
 Only these values will be edited:
 
@@ -197,7 +197,7 @@ After:
 </manifest>
 ```
 
-### Package.appxmanifest
+### Package.appxmanifest (UWP)
 
 Only these values will be edited:
 
@@ -231,6 +231,44 @@ After:
     <!-- ... -->
     
 </Package>
+```
+
+### config.xml (Cordova)
+
+Only these values will be edited:
+
+1) `widget/@version` (new version)
+2) `widget/@ios-CFBundleVersion` (new version)
+3) `widget/@android-versionCode` (integer computed this way: `(major * 1000000) + (minor * 10000) + (patch * 100)`)        
+
+Before:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<widget 
+    id="com.example.xavtool" 
+    android-versionCode="1000100" 
+    ios-CFBundleVersion="1.0.1" 
+    version="1.0.1" 
+    xmlns="http://www.w3.org/ns/widgets"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <!-- ... -->
+</widget>
+```
+
+After:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<widget 
+    id="com.example.xavtool" 
+    android-versionCode="1010000" 
+    ios-CFBundleVersion="1.1.0" 
+    version="1.1.0" 
+    xmlns="http://www.w3.org/ns/widgets"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <!-- ... -->
+</widget>
 ```
 
 ## Support

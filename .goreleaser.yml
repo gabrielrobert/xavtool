@@ -2,16 +2,13 @@ builds:
 - env:
   - CGO_ENABLED=0
 - goos:
-    - darwin
-    - linux
     - windows
 archive:
+  name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
   replacements:
-    darwin: Darwin
-    linux: Linux
-    windows: Windows
-    386: i386
-    amd64: x86_64
+    darwin: macOS
+    386: 32-bit
+    amd64: 64-bit
 checksum:
   name_template: 'checksums.txt'
 snapshot:
@@ -35,5 +32,5 @@ scoop:
     owner: gabrielrobert
     name: scoop-bucket
   homepage:  https://github.com/gabrielrobert/xavtool
-  description: Xamarin Automating Version Tool
+  description: Xplat Automating Version Tool
   license: MIT
