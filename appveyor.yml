@@ -14,8 +14,8 @@ install:
   - go env
   - go get github.com/gabrielrobert/xavtool
   - ps: iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
-  - scoop bucket add goreleaser https://github.com/goreleaser/scoop-bucket.git
-  - scoop install goreleaser
+  - ps: scoop bucket add goreleaser https://github.com/goreleaser/scoop-bucket.git
+  - ps: scoop install goreleaser
   - goreleaser -v
   - go get -t -v ./...
 
