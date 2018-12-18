@@ -1,6 +1,6 @@
 ![Header](_assets/xavtool_header.png "Header")
 
-# Xamarin Automating Version Tool
+# Xplat Automating Version Tool
 
 [![Build status](https://ci.appveyor.com/api/projects/status/6lfimg1j4pw9f807?svg=true)](https://ci.appveyor.com/project/grobert092/xavtool)
 [![Build Status](https://travis-ci.org/gabrielrobert/xavtool.svg?branch=master)](https://travis-ci.org/gabrielrobert/xavtool)
