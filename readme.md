@@ -127,7 +127,7 @@ It will update these files:
 
 ## Results
 
-### Info.plist
+### Info.plist (iOS)
 
 Only these values will be edited:
 
@@ -166,7 +166,7 @@ After:
 </plist>
 ```
 
-### AndroidManifest.xml
+### AndroidManifest.xml (Android)
 
 Only these values will be edited:
 
@@ -197,7 +197,7 @@ After:
 </manifest>
 ```
 
-### Package.appxmanifest
+### Package.appxmanifest (UWP)
 
 Only these values will be edited:
 
@@ -231,6 +231,44 @@ After:
     <!-- ... -->
     
 </Package>
+```
+
+### config.xml (Cordova)
+
+Only these values will be edited:
+
+1) `widget/@version` (new version)
+2) `widget/@ios-CFBundleVersion` (new version)
+3) `widget/@android-versionCode` (integer computed this way: `(major * 1000000) + (minor * 10000) + (patch * 100)`)        
+
+Before:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<widget 
+    id="com.example.xavtool" 
+    android-versionCode="1000100" 
+    ios-CFBundleVersion="1.0.1" 
+    version="1.0.1" 
+    xmlns="http://www.w3.org/ns/widgets"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <!-- ... -->
+</widget>
+```
+
+After:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<widget 
+    id="com.example.xavtool" 
+    android-versionCode="1010000" 
+    ios-CFBundleVersion="1.1.0" 
+    version="1.1.0" 
+    xmlns="http://www.w3.org/ns/widgets"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <!-- ... -->
+</widget>
 ```
 
 ## Support
