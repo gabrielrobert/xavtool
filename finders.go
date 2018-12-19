@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -20,6 +21,11 @@ func findManifests(root string, handlers []packageHandler) ([]packageInfo, error
 	fileList := []packageInfo{}
 
 	err := filepath.Walk(root, func(path string, f os.FileInfo, err error) error {
+
+		if err != nil {
+			fmt.Printf("Error with %s\n", path)
+			return filepath.SkipDir
+		}
 
 		if isIgnored(f) {
 			return filepath.SkipDir
